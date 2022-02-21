@@ -1,0 +1,807 @@
+---
+title: "Spatial analysis of public health data"
+subtitle: "Point Pattern Analysis"
+author: "Andy MacLachlan + Laura Sheppard"
+output:
+  xaringan::moon_reader:
+    css: ["custom.css", "default", "rladies", "rladies-fonts"]    
+    lib_dir: libs
+    includes:
+      in_header: [assets/header.html]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    seal: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-all, echo=FALSE}
+library(countdown)
+library(xaringan)
+library(xaringanExtra)
+library(knitr)
+
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+
+xaringanExtra::use_broadcast()
+xaringanExtra::use_freezeframe()
+xaringanExtra::use_scribble()
+#xaringanExtra::use_slide_tone()
+xaringanExtra::use_search(show_icon = TRUE)
+xaringanExtra::use_freezeframe()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_editable(expires = 1)
+xaringanExtra::use_fit_screen()
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,         
+  mute_unhighlighted_code = TRUE  
+)
+```
+
+class: inverse, center, title-slide, middle
+
+<style>
+.title-slide .remark-slide-number {
+  display: none;
+}
+</style>
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(fontawesome)
+```
+
+# Spatial analysis of public health data
+
+### Point Pattern Analysis
+
+### 21/02/2022 (updated: `r format(Sys.time(), "%d/%m/%Y")`)
+.pull-left[### Andy 
+`r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
+`r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
+`r fa("github", fill = "white")`[andrewmaclachlan](https://github.com/andrewmaclachlan)]
+
+.pull-right[### Laura
+`r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
+`r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
+`r fa("github", fill = "white")`[andrewmaclachlan](https://github.com/andrewmaclachlan)]
+
+
+`r fa("map-marker", fill = "white")`[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
+
+Acknowledgement: [Professor Adam Dennett](https://twitter.com/adam_dennett)
+
+<a href="https://github.com/andrewmaclachlan" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+---
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "img/casa_logo.jpg"
+)
+```
+
+# About me
+
+* Undergraduate in human geography, University of Sheffield + year abroad at the University of Wollongong
+
+* MSc in Remote Sensing and GIS, University of Southampton 
+
+* PhD in Geography and Environmental Science, University of Southampton / University of Western Australia "Earth Observation for Quantifying Urban Growth and its Application to Sustainable City Development"
+
+* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis 
+
+* [Research:](https://scholar.google.com/citations?user=wLrJwyQAAAAJ&hl=en)
+  * Geospatial tools / data for sustainable planning and environmental decision making 
+  
+* Teaching:
+  * [Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/)
+  * [Remotely Sensing Cities and Environments](https://andrewmaclachlan.github.io/CASA0023/)  
+---
+# About Laura
+
+
+---
+
+# How to use the lectures
+
+- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) `r emo::ji("speak")` shar-in-gen or [ʃæ.ˈriŋ.gæn]
+
+- `r fa("search")` In the bottom left there is a search tool which will search all content of presentation
+
+- Control + F will also search 
+
+- Press enter to move to the next result 
+
+- `r fa("pencil-alt")` In the top right let's you draw on the slides, although these aren't saved.
+
+- Pressing the letter `o` (for overview) will allow you to see an overview of the whole presentation and go to a slide
+
+- Alternatively just typing the slide number e.g. 10 on the website will take you to that slide
+
+- Pressing alt+F will fit the slide to the screen, this is useful if you have resized the window and have another open - side by side. 
+
+---
+
+class: inverse, center, middle
+
+# Slide and content acknowledgement: [Professor Adam Dennett](https://twitter.com/adam_dennett)
+
+---
+# Outline
+
+.pull-left[
+* The importance of pattern
+
+* Patterns of categorical point data – Point Pattern Analysis
+  * Quadrat Analysis
+  * Ripley’s K
+  * DBSCAN
+
+* Patterns of spatially referenced continuous observations
+  * Spatial autocorrelation
+  * Defining near and distant things
+  * Measuring spatial autocorrelation
+    * Moran’s I
+    * LISA
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/pump.jpg')
+```
+
+.small[Broad street pump and Jon Snow pub. Source:[Hartford Courant](https://www.tribpub.com/gdpr/courant.com/)
+]
+]
+???
+
+Two halves: 
+
+* Rapid overview of point pattern analysis
+* Detecting spatial patterns - where are they
+* Point data (or categorical data in space - lines / polygons)
+
+* Spatially referenced observations - where regions of a map are similar = clustering of values = spatial autocorrelation. 
+---
+
+# The first (?) point pattern analysis 
+
+### Dr Jon Snow
+
+.pull-left[
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/Jon_Snow_Season.png')
+```
+
+.small[Jon Snow. Source: [Wikipedia](https://en.wikipedia.org/wiki/Jon_Snow_(character)
+]
+]
+
+--
+
+.pull-right[
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/John_Snow.jpg')
+```
+
+.small[John Snow. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+]
+]
+
+---
+
+# What patterns show
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/cholera.png')
+```
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+???
+
+John snow often attributed with identifying the outbreak at the broad street pump
+Data was from mortality reports issued by the Registrar General Office not surveys
+Snow wasn't responsible directly, but it contributed to the knowledge 
+Snow also didn't event this mapping style - 1798 New York outbreak of Yellow fever - Valentine Seaman 
+Second version of the map in 1855 had distance to pump - first voroni diagram 
+
+---
+
+# Spatial Epidemiology: Lung Cancer
+
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/Gatrell.png')
+```
+
+.small[Spatial Point Pattern Analysis and its Application in Geographical Epidemiology. Source:[Gatrell et al.1996](https://www.jstor.org/stable/622936?seq=1#metadata_info_tab_contents)
+]
+
+???
+
+* Similar methods 
+* are the locations of lung cancer similar?
+* Does the incinerator have any influence ?
+---
+
+# Spatial Epidemiology: Mortality
+
+* Similar values might suggest there is something more going on
+* Some sort of spatial influence
+* Note the difference between spatially continuous and point data
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/Lorant.png')
+```
+
+.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&originRegion=eu-west-1&originCreation=20220221114112)
+]
+
+---
+
+# Quantifying Spatial Patterns
+
+What is fixed?
+
+.pull-left[
+
+### Point Pattern Analysis
+
+* Properties are fixed (e.g. binary - present or not)
+* Discrete objects - present or not, binary, yes or no.
+* Examples: fly tipping, stop and search, blue plaques, pharmacies 
+
+Properties fixed, but **space (location - x,y)** can vary
+
+]
+
+.pull-right[
+
+### Spatial Autocorrelation
+
+* Space (e.g. the location of the spatial units - wards, boroughs etc) is fixed
+* The values of the spatial units vary
+* Where the values are similar we say they exhibit Spatial Autocorrelation 
+
+Space is fixed, but **properties (values)** can vary
+
+]
+
+---
+
+# Examples
+
+* Location of blue plaques in London
+* Question: Are the points clustered or are they random?
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/blue_plaques.png')
+```
+
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#)
+]
+
+---
+
+# Examples
+
+* Average GCSE point score 2014 per London ward
+* Question: Are the values similar between certain wards?
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/average_GCSE.png')
+```
+
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#)
+]
+
+---
+# From points to spatially continuous observations 1
+
+* We can convert almost any point data into spatially continuous observations
+
+### Questions
+* Why should we never (or almost never) use count data (e.g. number of blue plaques per ward) for spatial autocorrelation measures?
+
+* In what instance might we be able to use count data?
+
+* Discuss in groups for 2 mins?
+
+`r countdown(minutes=1, seconds =30, warn_when = 10, bottom=0, left="65%")`
+
+---
+# From points to spatially continuous observations 2
+
+### Answers
+
+* Summing the counts generates results that are dependent on the size of the spatial unit ...e.g...
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/grid_vs_tess_counts.svg')
+```
+
+.small[Count of individuals in each zonal unit. Note how an underlying point distribution can generate vastly different looking choropleth maps given different aggregation schemes. Source:[Intro to GIS and Spatial Analysis Manuel Gimond, 2022](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html)]
+
+---
+# From points to spatially continuous observations 3
+
+* In this case we could sum our counts and normalise then based on some sort of underling data - such as population. e.g...lung cancer rates or mortality rates 
+
+Our code would look similar to this ...
+
+```{r, eval=FALSE}
+points_sf_joined <- LondonWardsMerged%>%
+  st_join(BluePlaquesSub)%>%
+  add_count(ward_name)%>%
+  janitor::clean_names()%>%
+  #calculate area
+  mutate(area=st_area(.))%>%
+  #then density of the points per ward
+  mutate(density=n/area)%>%
+  #select density and some other variables 
+  dplyr::select(density, ward_name, gss_code, n, average_gcse_capped_point_scores_2014)
+```
+
+* Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
+---
+# From points to spatially continuous observations 4
+
+### Answers
+
+* An instance where it is ok to use counts is where the mapping units are spatially consistent --e.g. hexagons or Uber's H3 grid
+* The variable spatial unit is removed
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/hexagons.jpg')
+```
+
+.small[Source:[Thematic Mapping with Hexagons, ESRI 2015](https://www.esri.com/about/newsroom/insider/thematic-mapping-with-hexagons/)
+]
+
+---
+# Take care! 
+
+### Modifiable Areal Unit Problem
+
+* Different aggregations will lead to:
+
+  * Different outcomes
+  
+  * Uncomparable results 
+  
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.PNG')
+```
+
+.small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
+]  
+---
+# Take care 2! 
+
+If you have aggregated point data they can no longer be described as points...as [Gimond 2022 says](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html#ecological-fallacy)
+
+> "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
+
+---
+
+class: inverse, center, middle
+# Now how do we calculate clustering and spatial autocorrelation...
+
+---
+
+
+# Xaringan 
+
+* `r emo::ji("speak")` Xaringan = shar-in-gen or [ʃæ.ˈriŋ.gæn]..
+
+* Created by Yihui Xie....also created Bookdown...
+
+* Install the package from GitHub
+
+* You may also need the remotes package
+
+```{r, eval=FALSE, message=FALSE}
+remotes::install_github("yihui/xaringan")
+```
+
+* In RStudio: 
+  * Make a new project
+  * File -> New File -> R Markdown -> From Template -> Ninja Presentation
+---
+
+# Xaringan 2
+
+* Make a new project > click Knit
+
+
+
+---
+
+class: inverse, center, middle
+# Don't panic
+
+---
+
+# Start at the top
+
+```{r, eval=FALSE}
+---
+title: "Presentation Ninja"
+subtitle: "⚔<br/>with xaringan"
+author: "Yihui Xie"
+institute: "RStudio, PBC"
+date: "2016/12/12 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```
+???
+
+highlight refers to how the code shows
+
+---
+
+# Writing slides
+
+There are two "types" of slide.
+
+Each slide is separated by a ---, this denotes a new slide 
+
+* A normal slide (like this one) is just...
+
+```{r, eval=FALSE}
+---
+
+# Writing slides
+
+There are two "types" of slide.
+
+```
+
+* An inverse slide (the ones with just words on and the blue background)...example on next slide
+
+```{r, eval=FALSE}
+---
+class: inverse, center, middle
+
+# Writing slides
+
+There are two "types" of slide.
+```
+
+---
+class: inverse, center, middle
+
+# Writing slides
+
+There are two "types" of slide.
+
+---
+class: inverse, center, middle
+
+# Inverse slides are useful for breaking up slides with text and making a specific point
+
+---
+
+class: center, middle
+
+# If you don't use inverse you just get a white (or other, depending on your colourscheme) background...
+
+```{r, eval=FALSE}
+class: center, middle
+
+# If you don't use inverse you just get a white (or other, depending on your colourscheme) background...
+```
+---
+
+# Slide tools
+
+```{r, eval=FALSE}
+# Slide tools
+
+```
+## Sub heading
+
+```{r, eval=FALSE}
+## Sub heading
+```
+### sub sub heading
+
+```{r, eval=FALSE}
+### sub sub heading
+```
+
+* Bullet point
+  * Sub bullet point
+
+```{r, eval=FALSE}
+  * Bullet point
+    * Sub bullet point
+```
+---
+# Slide tools 2
+
+1. List
+1. List 2
+
+```{r, eval=FALSE}
+1. List
+1. List 2 # yes, it's 1 for both, R knows it's a list.
+```
+--
+To add a break in a slide, meaning you have to click to advance **on the specfic** slide...
+--
+```{r, eval=FALSE}
+--
+```
+
+.pull-left[
+* To have things on the left
+```{r, eval=FALSE}
+.pull-left[
+* To have things on the left
+]
+```
+]
+
+.pull-right[
+* To have things on the right
+```{r, eval=FALSE}
+.pull-right[
+* To have things on the right
+]
+```
+]
+
+Remember then a new slide is starts with ...
+```{r, eval=FALSE}
+---
+```
+
+---
+# Images
+
+...it's massive!...we need to remember code chunk options.... 
+
+
+---
+
+# Images 2
+
+Common code chunk options
+
+* Echo = TRUE, shows code or FALSE = doesn't
+* fig.align='center'
+* out.width= 'x%'
+
+
+
+.small[The Lena River, some 2,800 miles long, is one of the largest rivers in the world. Source:[ Original from NASA. Digitally enhanced by rawpixel](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
+]
+
+
+
+---
+# Images 3
+
+* Creating hyperlinks $[the linking text](the URL)$
+```{r echo=TRUE, out.width='100%', fig.align='center', eval=FALSE}
+[make a link](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
+```
+
+* You can use $.pull-left[]$ and $.pull-right[]$ with images too. 
+
+.pull-left[
+
+
+.small[The Lena River, some 2,800 miles long, is one of the largest rivers in the world. Source:[ Original from NASA. Digitally enhanced by rawpixel](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
+]
+]
+
+.pull-right[
+* Some text
+]
+
+---
+# Tables
+
+```{r, message=FALSE}
+library(tidyverse) #where the mpg data is stored
+knitr::kable(head(mpg), format = 'html')
+
+```
+---
+# Tables 2
+
+If you need to create a table....
+
+* write a data set in excel or Google sheets
+
+* load that into R (not showing the code to load it)
+
+* wrangle anything you don't want
+
+* use the code on the previous slide to display it
+
+---
+
+# Citing 
+
+
+---
+# Live preview of slides
+
+It can be annoying to have to click Knit every time.
+
+The Add In "Infinite Moon Reader" from Yihui Xie generates the slides every time you save the .Rmd.
+
+Generates the slides on the viewer tab --- bottom right of RStudio
+
+As you scroll through the slides the viewer tab updates with the slide you are on... 
+
+---
+
+# Live preview of slides
+
+
+.small[The Ultimate Infinite Moon Reader for xaringan Slides. Source:[ Yihui Xie ](https://yihui.org/en/2019/02/ultimate-inf-mr/)
+]
+---
+# Use Git
+
+.pull-left[
+* Same as we saw in CASA0005
+
+* Store your images in a folder, i use one called img
+
+* Any additional libraries you use that are automatically loaded go into the libs folder (should be automatically created)
+
+* It will become quicker to use the shell as opposed to the RStudio git GUI...
+
+* Commands: 
+```{r echo=TRUE, eval = FALSE}
+git add .
+
+git commit -m "my commit message"
+
+git push
+```
+]
+
+.pull-right[
+
+]
+---
+# Use Git 2
+
+Remember to ignore any large files you might have...
+
+When you initialize git a .gitignore is created...
+
+
+.small[GitHub maximum file upload of 50mb. Source:[reddit r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/comments/gm69za/my_girlfriend_crocheted_my_favourite_meme_as_a/)
+]
+---
+
+# Hosting on GitHub
+
+* Few ways we can do this...like CASA0005
+
+1. `use_github()` from the `usethis` package will automatically create a repo of the same name as your RProject.
+
+1. Or create a repository on GitHub 
+  * Then use the code provided in the shell for your project that has git enabled 
+  * "...or push an existing repository from the command line"
+  * Let's you call the repo something other than your RProject name....
+  * to do this you must **first** have commited some files to your git already. 
+
+1. To "deploy" the presentation on GitHub pages
+  * `usethis::use_github_pages(branch = "main")` OR
+  * On GitHub repo > settings > Pages > select source as main > Save
+
+---
+class: inverse, center, title-slide, middle
+
+# For the presentation it's expected all group members will contribute on Git
+
+# Remember pushing and pulling?
+  
+---
+# Themes 
+
+* Xaringan can be styled using Cascading Style Sheets (CSS)
+
+* But there are many themes within the Xaringan itself 
+
+```{r, output=TRUE}
+names(xaringan:::list_css())
+```
+---
+# Themes 2 
+
+```{r, eval=FALSE}
+---
+title: "Presentation Ninja"
+subtitle: "⚔<br/>with xaringan"
+author: "Yihui Xie"
+institute: "RStudio, PBC"
+date: "2016/12/12 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts] #<<
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```
+---
+# Add ons
+
+[Garrick Aden-Buie](https://www.garrickadenbuie.com/) has many Xaringan extensions
+
+They are refreshingly easy to use:
+
+.pull-left[
+
+[xaringanExtra](https://pkg.garrickadenbuie.com/xaringanExtra/#/)
+
+* Search 
+* Clipboard
+* Tile view
+* Hover over code
+]
+
+.pull-right[
+[xaringanthemer](https://pkg.garrickadenbuie.com/xaringanthemer/)
+
+`
+.small[Source:[ xaringanthemer](https://pkg.garrickadenbuie.com/xaringanthemer/)
+]
+]
+---
+class: inverse, center, middle
+
+# Keep it simple 
+---
+# Task
+
+30 minutes + homework of you creating a **small** 5 slide presentation
+
+* Select a sensor of your choice (any)
+* Create a short (maximum 5 slides) presentation on the sensor in xaringan
+* Things to consider
+  * Who runs the sensor
+  * What is the cost of the data 
+  * Where to source the data
+  * Resolutions (e.g. in a table)
+  * Applications of the data...with an example
+  * Images of the data (not required to download it)
+  * An example of the data being used within academic (or policy) literature 
+
+To start with get xaringan working.
+
+---
+
+
