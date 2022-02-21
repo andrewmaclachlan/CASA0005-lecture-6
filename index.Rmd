@@ -89,3 +89,20 @@ xaringanExtra::use_logo(
 )
 ```
 
+# About me
+
+* Undergraduate in human geography, University of Sheffield + year abroad at the University of Wollongong
+
+* MSc in Remote Sensing and GIS, University of Southampton 
+
+* PhD in Geography and Environmental Science, University of Southampton / University of Western Australia "Earth Observation for Quantifying Urban Growth and its Application to Sustainable City Development"
+
+* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis + lead our MSc in Smart Cities and Urban Analytics becoming Urban Spatial Science
+
+* [Research:](https://scholar.google.com/citations?user=wLrJwyQAAAAJ&hl=en)
+  * Geospatial tools / data for sustainable planning and environmental decision making 
+  
+* Teaching:
+  * [Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/)
+  * [Remotely Sensing Cities and Environments](https://andrewmaclachlan.github.io/CASA0023/)  
+---
