@@ -97,7 +97,7 @@ xaringanExtra::use_logo(
 
 * PhD in Geography and Environmental Science, University of Southampton / University of Western Australia "Earth Observation for Quantifying Urban Growth and its Application to Sustainable City Development"
 
-* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis 
+* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis + lead our MSc in Smart Cities and Urban Analytics becoming Urban Spatial Science
 
 * [Research:](https://scholar.google.com/citations?user=wLrJwyQAAAAJ&hl=en)
   * Geospatial tools / data for sustainable planning and environmental decision making 
@@ -421,15 +421,16 @@ class: inverse, center, middle
 
 * quincunx or bean machine (or Galton box) = normal distribution 
 
-* Francis Galton coined the term eugenics and endowed UCL with his personal collection and archive along with a bequest for the country’s first professorial Chair of Eugenics. Karl Pearson was the first holder of this chair. UCL recently demaned all spaces associated with Pearson and Galton
 
-
-```{r echo=FALSE, out.width='25%', fig.align='center'}
+```{r echo=FALSE, out.width='45%', fig.align='center'}
 knitr::include_graphics('img/Galton_box.jpg')
 ```
 
 .small[Source:[Wikipedia](https://en.wikipedia.org/wiki/Galton_board)
 ]  
+
+.small[Francis Galton coined the term eugenics and endowed UCL with his personal collection and archive along with a bequest for the country’s first professorial Chair of Eugenics. Karl Pearson was the first holder of this chair. UCL recently demaned all spaces associated with Pearson and Galton]
+
 ]
 
 ???
@@ -506,7 +507,6 @@ Poisson distribution will tell us the probability of rate of event happening ove
 Breweries in London around 2017 - what the probability of finding a brewery is in a borough, based on the average occurrence  in London
 
 ---
-
 
 # The Poisson Distribution 2
 
