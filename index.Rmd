@@ -65,15 +65,15 @@ library(fontawesome)
 ### Point Pattern Analysis
 
 ### 21/02/2022 (updated: `r format(Sys.time(), "%d/%m/%Y")`)
-.pull-left[### Andy 
+.pull-left[### Andy MacLachlan
 `r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
 `r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
 `r fa("github", fill = "white")`[andrewmaclachlan](https://github.com/andrewmaclachlan)]
 
-.pull-right[### Laura
-`r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
-`r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
-`r fa("github", fill = "white")`[andrewmaclachlan](https://github.com/andrewmaclachlan)]
+.pull-right[### Laura Sheppard
+`r fa("paper-plane", fill = "white")`[laura.sheppard.20@ucl.ac.uk](mailto:laura.sheppard.20@ucl.ac.uk)
+`r fa("twitter", fill = "white")`[laurahsheppard](https://twitter.com/laurahsheppard)
+`r fa("github", fill = "white")`[LauraSheppard](https://github.com/LauraSheppard)]
 
 
 `r fa("map-marker", fill = "white")`[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
@@ -116,9 +116,7 @@ xaringanExtra::use_logo(
 
 - Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) `r emo::ji("speak")` shar-in-gen or [ʃæ.ˈriŋ.gæn]
 
-- `r fa("search")` In the bottom left there is a search tool which will search all content of presentation
-
-- Control + F will also search 
+- `r fa("search")` In the bottom left there is a search tool which will search all content of presentation (Control + F will also search)
 
 - Press enter to move to the next result 
 
@@ -129,6 +127,8 @@ xaringanExtra::use_logo(
 - Alternatively just typing the slide number e.g. 10 on the website will take you to that slide
 
 - Pressing alt+F will fit the slide to the screen, this is useful if you have resized the window and have another open - side by side. 
+
+- Pressing h will show the help 
 
 ---
 
@@ -359,6 +359,22 @@ points_sf_joined <- LondonWardsMerged%>%
 ```
 
 * Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
+
+---
+
+# Small pause for code questions
+
+I've assumed the following:
+
+* You have some familiarity with:
+  * [R](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html) 
+  * [Tidyverse](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#reading-data-into-r)
+  * [Spatial features (sf)](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#background-to-spatial-data-in-r)
+  * [Coordinate reference systems (e.g. geographic and projected)](https://andrewmaclachlan.github.io/CASA0005repo/spatial-descriptive-statistics.html#part-1-projections)
+
+Usually the i'd gauge this now and adjust what we talk about...but Laura can pause here and address any questions...
+
+The lecture is primarily for the theory and the practical will go over the code. 
 ---
 # From points to spatially continuous observations 4
 
@@ -528,8 +544,7 @@ Breweries in London around 2017 - what the probability of finding a brewery is i
 
 # The Poisson Distribution 2
 
-![](https://www.youtube.com/watch?v=FdcFWP1nyRQ)
-
+<p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/FdcFWP1nyRQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 
 ---
 
@@ -541,406 +556,142 @@ Breweries in London around 2017 - what the probability of finding a brewery is i
 * Events are independent of each other
 * The average number of events over space or time is known
 
+### Use
 
+* It’s very useful in Point Pattern Analysis as it allows us to compare a random expected model to our observations
+
+* Where our data **do not fit the Poisson model, then something interesting might be going on!** 
+
+* Our events might not be independent of each other – they might be clustered or dispersed and something might be causing this…
 
 ---
-# Xaringan 
+# Testing for CSR - Point Pattern Analysis
+## Quadrat Analysis
 
-* `r emo::ji("speak")` Xaringan = shar-in-gen or [ʃæ.ˈriŋ.gæn]..
+.pull-left[
 
-* Created by Yihui Xie....also created Bookdown...
+* Developed and used frequently by ecologists
 
-* Install the package from GitHub
+* Grid of squares
 
-* You may also need the remotes package
+* Count number of incidents (burglaries, cholera deaths, hippos etc.) in each cell – store results in a table
 
-```{r, eval=FALSE, message=FALSE}
-remotes::install_github("yihui/xaringan")
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/blue_plaques_in_harrow.png')
+```
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#)
+]
+]
+.center[
+ **Compare the observed occurrences with a CSR Poisson model...**
+ 
+ Note, be careful with CSR and CRS]
+---
+
+# In code...
+
+For point pattern analysis we need a point pattern (ppp) object...and an observation window...
+
+```{r, eval=FALSE}
+window <- as.owin(Harrow)
+
+BluePlaquesSub.ppp <- ppp(x=BluePlaquesSub@coords[,1],
+                          y=BluePlaquesSub@coords[,2],
+                          window=window)
 ```
 
-* In RStudio: 
-  * Make a new project
-  * File -> New File -> R Markdown -> From Template -> Ninja Presentation
+The we can create a grid...
+
+```{r, eval=FALSE}
+BluePlaquesSub.ppp %>%
+  quadratcount(.,nx = 6, ny = 6)
+```
+
+Then pull out the results...
+
+```{r, eval=FALSE}
+Qcount <- BluePlaquesSub.ppp %>%
+  quadratcount(.,nx = 6, ny = 6) %>%
+  as.data.frame() %>%
+  dplyr::count(Var1=Freq)%>%
+  dplyr::rename(Freqquadratcount=n)
+```
+
 ---
+# Quadrat Analysis
 
-# Xaringan 2
+* The (Poisson) probability (Pr) of an event (brewery in a quadrat square) is calculated ...
+ex
+$$Pr= (X =k) = \frac{\lambda^{k}e^{-\lambda}}{k!}$$
+where:
 
-* Make a new project > click Knit
+* `x` is the number of occurrences 
+* `λ` is the mean number of occurrences
+* `e` is a constant- 2.718
 
+---
+# Plugging the numbers
+| Var1 | Freq count | Total plaques | Lambda | Probability | Expected count | Observed probability |
+|------|------------|---------------|--------|-------------|----------------|----------------------|
+| 0    | 12         | 0             | 1.38   | 0.3         | 7.3            | 0.4                  |
+| 1    | 7          | 7             |        | 0.3         | 10.1           | 0.2                  |
+| 4    | 2          | 8             |        | 0.0         | 1.1            | 0.1                  |
+| 7    | 1          | 7             |        | 0.0         | 0.0            | 0.0                  |
+|      | 29         | 40            |        | 1.0         | 28.9           | 1.0                  |
 
+.pull-left[
+* Var 1 = Number of values within the grids
+* Freqquad = Number of grids with that value
+* Total blue plaques = Var1*Frequency 
+* Lambda = Total blue plaques / total frequency 
+]
+
+.pull-right[
+* Probability = Probability of number of plaques in quadrant $$\frac{\lambda^{k}e^{-\lambda}}{k!}$$
+* Expected = Expected frequency count on the Poisson distribution 
+* Observed probability = Frequency count / sum of the frequency count
+]
 
 ---
 
 class: inverse, center, middle
-# Don't panic
+
+# Full example on GitHub repo in the excel document
 
 ---
 
-# Start at the top
+# Confirming spatial randomness 
 
-```{r, eval=FALSE}
----
-title: "Presentation Ninja"
-subtitle: "⚔<br/>with xaringan"
-author: "Yihui Xie"
-institute: "RStudio, PBC"
-date: "2016/12/12 (updated: `r Sys.Date()`)"
-output:
-  xaringan::moon_reader:
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
----
-```
-???
+* We would expect the probability distribution of X (blue plaques in London) to have a Poisson distribution if they exhibit Complete Spatial Randomness
 
-highlight refers to how the code shows
+* We can test for CSR by comparing the observed and expected counts and using a test such as the chi-squared ($𝛸^2$) test
+
+* If our p-value is > 0.05 then this indicates that we have CSR and there is no pattern in our points. 
+
+* If it is < 0.05, this indicates that we do have clustering in our points.
+
+* Here our p-value = 0.2594, implying complete spatial randomness
 
 ---
 
-# Writing slides
-
-There are two "types" of slide.
-
-Each slide is separated by a ---, this denotes a new slide 
-
-* A normal slide (like this one) is just...
-
-```{r, eval=FALSE}
----
-
-# Writing slides
-
-There are two "types" of slide.
-
-```
-
-* An inverse slide (the ones with just words on and the blue background)...example on next slide
-
-```{r, eval=FALSE}
----
 class: inverse, center, middle
 
-# Writing slides
+# What are the issues with quadrat analysis ?
 
-There are two "types" of slide.
-```
+### (small pause)
 
----
-class: inverse, center, middle
-
-# Writing slides
-
-There are two "types" of slide.
-
----
-class: inverse, center, middle
-
-# Inverse slides are useful for breaking up slides with text and making a specific point
-
----
-
-class: center, middle
-
-# If you don't use inverse you just get a white (or other, depending on your colourscheme) background...
-
-```{r, eval=FALSE}
-class: center, middle
-
-# If you don't use inverse you just get a white (or other, depending on your colourscheme) background...
-```
----
-
-# Slide tools
-
-```{r, eval=FALSE}
-# Slide tools
-
-```
-## Sub heading
-
-```{r, eval=FALSE}
-## Sub heading
-```
-### sub sub heading
-
-```{r, eval=FALSE}
-### sub sub heading
-```
-
-* Bullet point
-  * Sub bullet point
-
-```{r, eval=FALSE}
-  * Bullet point
-    * Sub bullet point
-```
----
-# Slide tools 2
-
-1. List
-1. List 2
-
-```{r, eval=FALSE}
-1. List
-1. List 2 # yes, it's 1 for both, R knows it's a list.
-```
 --
-To add a break in a slide, meaning you have to click to advance **on the specfic** slide...
---
-```{r, eval=FALSE}
---
-```
 
-.pull-left[
-* To have things on the left
-```{r, eval=FALSE}
-.pull-left[
-* To have things on the left
-]
-```
-]
-
-.pull-right[
-* To have things on the right
-```{r, eval=FALSE}
-.pull-right[
-* To have things on the right
-]
-```
-]
-
-Remember then a new slide is starts with ...
-```{r, eval=FALSE}
----
-```
-
----
-# Images
-
-...it's massive!...we need to remember code chunk options.... 
-
-
+### Quadrat size
+### Shape
+### Both MAUP 
+### the question isn't that helpful...
 ---
 
-# Images 2
-
-Common code chunk options
-
-* Echo = TRUE, shows code or FALSE = doesn't
-* fig.align='center'
-* out.width= 'x%'
-
-
-
-.small[The Lena River, some 2,800 miles long, is one of the largest rivers in the world. Source:[ Original from NASA. Digitally enhanced by rawpixel](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
-]
-
-
-
----
-# Images 3
-
-* Creating hyperlinks $[the linking text](the URL)$
-```{r echo=TRUE, out.width='100%', fig.align='center', eval=FALSE}
-[make a link](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
-```
-
-* You can use $.pull-left[]$ and $.pull-right[]$ with images too. 
-
-.pull-left[
-
-
-.small[The Lena River, some 2,800 miles long, is one of the largest rivers in the world. Source:[ Original from NASA. Digitally enhanced by rawpixel](https://www.rawpixel.com/image/440230/free-photo-image-nasa-russia-earth)
-]
-]
-
-.pull-right[
-* Some text
-]
-
----
-# Tables
-
-```{r, message=FALSE}
-library(tidyverse) #where the mpg data is stored
-knitr::kable(head(mpg), format = 'html')
-
-```
----
-# Tables 2
-
-If you need to create a table....
-
-* write a data set in excel or Google sheets
-
-* load that into R (not showing the code to load it)
-
-* wrangle anything you don't want
-
-* use the code on the previous slide to display it
-
----
-
-# Citing 
-
-
----
-# Live preview of slides
-
-It can be annoying to have to click Knit every time.
-
-The Add In "Infinite Moon Reader" from Yihui Xie generates the slides every time you save the .Rmd.
-
-Generates the slides on the viewer tab --- bottom right of RStudio
-
-As you scroll through the slides the viewer tab updates with the slide you are on... 
-
----
-
-# Live preview of slides
-
-
-.small[The Ultimate Infinite Moon Reader for xaringan Slides. Source:[ Yihui Xie ](https://yihui.org/en/2019/02/ultimate-inf-mr/)
-]
----
-# Use Git
-
-.pull-left[
-* Same as we saw in CASA0005
-
-* Store your images in a folder, i use one called img
-
-* Any additional libraries you use that are automatically loaded go into the libs folder (should be automatically created)
-
-* It will become quicker to use the shell as opposed to the RStudio git GUI...
-
-* Commands: 
-```{r echo=TRUE, eval = FALSE}
-git add .
-
-git commit -m "my commit message"
-
-git push
-```
-]
-
-.pull-right[
-
-]
----
-# Use Git 2
-
-Remember to ignore any large files you might have...
-
-When you initialize git a .gitignore is created...
-
-
-.small[GitHub maximum file upload of 50mb. Source:[reddit r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/comments/gm69za/my_girlfriend_crocheted_my_favourite_meme_as_a/)
-]
----
-
-# Hosting on GitHub
-
-* Few ways we can do this...like CASA0005
-
-1. `use_github()` from the `usethis` package will automatically create a repo of the same name as your RProject.
-
-1. Or create a repository on GitHub 
-  * Then use the code provided in the shell for your project that has git enabled 
-  * "...or push an existing repository from the command line"
-  * Let's you call the repo something other than your RProject name....
-  * to do this you must **first** have commited some files to your git already. 
-
-1. To "deploy" the presentation on GitHub pages
-  * `usethis::use_github_pages(branch = "main")` OR
-  * On GitHub repo > settings > Pages > select source as main > Save
-
----
-class: inverse, center, title-slide, middle
-
-# For the presentation it's expected all group members will contribute on Git
-
-# Remember pushing and pulling?
-  
----
-# Themes 
-
-* Xaringan can be styled using Cascading Style Sheets (CSS)
-
-* But there are many themes within the Xaringan itself 
-
-```{r, output=TRUE}
-names(xaringan:::list_css())
-```
----
-# Themes 2 
-
-```{r, eval=FALSE}
----
-title: "Presentation Ninja"
-subtitle: "⚔<br/>with xaringan"
-author: "Yihui Xie"
-institute: "RStudio, PBC"
-date: "2016/12/12 (updated: `r Sys.Date()`)"
-output:
-  xaringan::moon_reader:
-    css: [default, metropolis, metropolis-fonts] #<<
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
----
-```
----
-# Add ons
-
-[Garrick Aden-Buie](https://www.garrickadenbuie.com/) has many Xaringan extensions
-
-They are refreshingly easy to use:
-
-.pull-left[
-
-[xaringanExtra](https://pkg.garrickadenbuie.com/xaringanExtra/#/)
-
-* Search 
-* Clipboard
-* Tile view
-* Hover over code
-]
-
-.pull-right[
-[xaringanthemer](https://pkg.garrickadenbuie.com/xaringanthemer/)
-
-`
-.small[Source:[ xaringanthemer](https://pkg.garrickadenbuie.com/xaringanthemer/)
-]
-]
----
-class: inverse, center, middle
-
-# Keep it simple 
----
-# Task
-
-30 minutes + homework of you creating a **small** 5 slide presentation
-
-* Select a sensor of your choice (any)
-* Create a short (maximum 5 slides) presentation on the sensor in xaringan
-* Things to consider
-  * Who runs the sensor
-  * What is the cost of the data 
-  * Where to source the data
-  * Resolutions (e.g. in a table)
-  * Applications of the data...with an example
-  * Images of the data (not required to download it)
-  * An example of the data being used within academic (or policy) literature 
-
-To start with get xaringan working.
-
----
+# Ripley's K 
 
 
