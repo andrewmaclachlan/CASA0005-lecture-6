@@ -109,6 +109,17 @@ xaringanExtra::use_logo(
 
 # About Laura
 
+* Undergraduate degree in Geography with Quantitative Research Methods, University of Bristol
+* Master’s degree in Advanced Quantitative Methods, University of Bristol
+* PhD degree (started in September 2020) in Advanced Spatial Analysis at CASA, UCL
+
+Research:
+* PhD is on Gendering the Research Pipeline and Diversifying Doctoral Education – includes gender and higher educational inequalities using data science and machine learning (validation, ensemble models, gender inferencing algorithms, text & pdf analysis, multilevel modelling, mapping, visualisations etc.)
+
+Teaching:
+* Taught on Geographic Information Systems and Science module in CASA for the last two years 
+* Associate Fellow of Higher Education Academy
+
 
 ---
 
@@ -321,7 +332,7 @@ knitr::include_graphics('img/average_GCSE.png')
 
 * In what instance might we be able to use count data?
 
-* Discuss in groups for 2 mins?
+* Discuss in groups for 1 min 30 seconds?
 
 `r countdown(minutes=1, seconds =30, warn_when = 10, bottom=0, left="65%")`
 
@@ -402,7 +413,7 @@ knitr::include_graphics('img/hexagons.jpg')
   * Uncomparable results 
   
 ```{r echo=FALSE, out.width='60%', fig.align='center'}
-knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.PNG')
+knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.png')
 ```
 
 .small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
@@ -496,7 +507,7 @@ knitr::include_graphics('img/thewall.jpg')
 
 
 ```{r echo=FALSE, out.width='75%', fig.align='center'}
-knitr::include_graphics('img/Point_pattern.PNG')
+knitr::include_graphics('img/Point_pattern.png')
 ```
 
 .small[Source:[Wikipedia](https://en.wikipedia.org/wiki/Point_pattern_analysis#/media/File:Point_pattern.png)
@@ -629,12 +640,14 @@ ex
 $$Pr= (X =k) = \frac{\lambda^{k}e^{-\lambda}}{k!}$$
 where:
 
-* `x` is the number of occurrences 
-* `λ` is the mean number of occurrences
-* `e` is a constant- 2.718
+* $x$ is the number of occurrences 
+
+* $λ$ is the mean number of occurrences
+
+* $e$ is a constant- 2.718
 
 ---
-# Plugging the numbers
+# Plugging in the numbers
 | Var1 | Freq count | Total plaques | Lambda | Probability | Expected count | Observed probability |
 |------|------------|---------------|--------|-------------|----------------|----------------------|
 | 0    | 12         | 0             | 1.38   | 0.3         | 7.3            | 0.4                  |
@@ -666,9 +679,13 @@ class: inverse, center, middle
 
 # Confirming spatial randomness 
 
-* We would expect the probability distribution of X (blue plaques in London) to have a Poisson distribution if they exhibit Complete Spatial Randomness
+* We would expect the probability distribution of X (blue plaques in London) to have a Poisson distribution if they exhibit Complete Spatial Randomness...we can look at our plot...
 
-* We can test for CSR by comparing the observed and expected counts and using a test such as the chi-squared ($𝛸^2$) test
+```{r echo=FALSE, out.width='35%', fig.align='center'}
+knitr::include_graphics('img/quadrat_plot.png')
+```
+
+* We can test for CSR by comparing the observed and expected counts and using a test such as the chi-squared 
 
 * If our p-value is > 0.05 then this indicates that we have CSR and there is no pattern in our points. 
 
@@ -693,5 +710,202 @@ class: inverse, center, middle
 ---
 
 # Ripley's K 
+
+.pull-left[
+
+* To avoid scale and zoning problems associated with quadrat analysis, Ripley’s K tests for CSR for circles of varying radii around each point
+
+ $$K(r) = \lambda^{-1} \sum{i}\sum{j}\frac{I(d_ij<r)}{n}$$
+
+* In English: Ripley’s K value for any circle radius $r$ = the average density of points at that radius $\lambda = (n/ \Pi r^2))$
+
+* Multiplied by the sum of the distances $d_ij$ between all points within that search radius
+
+* Divided by the total number of points, n
+
+* I = 1 or 0 depending if $d_ij < r$
+
+]
+
+.pull-right[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/ripleyK.png')
+```
+]
+---
+# Ripley's K is simply...
+
+.pull-left[
+
+```{r, eval=FALSE}
+K <- BluePlaquesSub.ppp %>%
+  Kest(., correction="border") %>%
+  plot()
+```
+
+* The correction specifies how points towards the edge are dealt with
+
+* Border means that points towards the edge are ignored for the calculation but are included for the central points
+
+* In R type `?kest` into the console for more info 
+]
+
+.pull-right[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/ripleyKout.png')
+```
+* Where the value of K falls above the line, the data appear to be clustered at that distance (up to 1300 metres). 
+
+* Where the value of K is below the line, the data are dispersed
+]
+
+---
+
+class: inverse, center, middle
+
+# What are the issues with Ripley's K ?
+
+### (small pause)
+
+--
+
+### Computationally intensive when there are lots of points to consider
+### Extent of the study area can affect the calculation... eventually the radius around any point will include all other points in the study area
+### Phenomenon being studied cannot just occur anywhere (e.g. a river) - it's not network distance but Euclidean 
+
+---
+class: inverse, center, middle
+
+# We still don't know where are clusters are ?
+
+---
+# Density-based spatial clustering of applications with noise (DBSCAN)
+
+.pull-left[
+Popular because can detect non-linear clusters
+
+2 parameters: 
+
+* Epsilon (eps) = size of neighbourhood within which to search for other points
+
+* Minimum number of points to search for (MinPts)
+
+If a point has >= MinPts in neighbourhood then defined as ‘Core’
+
+If point in neighbourhood of a core point but has <MinPts in its own neighbourhood, then defined as ‘Border’]
+
+.pull-right[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/DBSCAN.png')
+```
+.small[DBSCAN. Source:[Medium](https://medium.com/@agarwalvibhor84/lets-cluster-data-points-using-dbscan-278c5459bee5/)]
+
+```{r echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics('img/DBSCAN_output.png')
+```
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#density-based-spatial-clustering-of-applications-with-noise-dbscan)]
+
+]
+
+---
+
+# DBSCAN
+
+How to select values
+
+OPTICS
+
+---
+
+class: inverse, center, middle
+
+# But... how similar is our data across geographic space?
+
+#### sort of.. we are now considering spatially continous data (e.g. density of the points) as opposed to the points themselves...remember the quote from Gimmond 2022...
+
+>you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!
+
+---
+class: inverse, center, middle
+
+# Just because we have clustering doesn't mean there will be patterns of spatially referenced continuous observations 
+
+---
+# Spatially continous observations 
+
+Tobler's First Law of Geography 
+
+> "Everything is related to everything else, but near things are more related than distant things.”
+
+But this does depend on our level of aggregation here...
+
+```{r echo=FALSE, out.width='32%', fig.align='center'}
+knitr::include_graphics('img/spatial_units.png')
+```
+.small[Spatial Units. Source:[Tower Hamlets](https://www.towerhamlets.gov.uk/Documents/Borough_statistics/Research-tools-and-guidance/RB-Census2011-Census-Geography-Guide-2013-05.pdf)]
+---
+# Spatially continous observations 
+
+Formal definition:
+
+The (auto*)correlation among observations of a single variable (smoking rates, unemployment, etc.) that is strictly attributable to the proximity of those observations in geographic space.
+
+*Auto = with itself
+
+```{r echo=FALSE, out.width='75%', fig.align='center'}
+knitr::include_graphics('img/auto_corr.png')
+```
+
+--
+
+How do we define near and distant spatial units?
+
+What is a neighbour ? What is not a neighbour? 
+---
+class: inverse, center, middle
+
+```{r echo=FALSE, out.width='75%', fig.align='center'}
+knitr::include_graphics('img/neighbours.jpg')
+```
+
+---
+
+class: inverse, center, middle
+
+# In the classroom identify who is your neighbour? 
+
+### what case did you use?
+
+```{r echo=FALSE, out.width='30%', fig.align='center'}
+knitr::include_graphics('img/neighbourscase.png')
+```
+
+.small[Neighbour cases. Source:[Bellefon and Gleut, INSEE](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.insee.fr%2Fen%2Fstatistiques%2Ffichier%2F3635545%2Fimet131-f-chapitre-2.pdf&psig=AOvVaw1LoIbkFCWaGE8yFGX33S0k&ust=1645634985794000&source=images&cd=vfe&ved=0CAwQjhxqFwoTCOj3mpvik_YCFQAAAAAdAAAAABAN)
+]
+
+```{r echo=FALSE, out.width='30%', fig.align='center'}
+knitr::include_graphics('img/nearest.jpeg')
+```
+.small[Nearest neighbour. Source:[Towards Data Science](https://towardsdatascience.com/building-a-k-nearest-neighbors-k-nn-model-with-scikit-learn-51209555453a)
+]
+
+---
+
+# GIS what is a neighbour
+
+* We use the rules we have set - Rook, Queen, KNN or even just a distance 
+
+* We then define this in a spatial weight matrix 
+  * B is the basic binary coding (1/0)
+  * W is row standardised (sums over all links to n)
+  * C is globally standardised (sums over all links to n)
+
+
+```{r echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics('img/matrix.png')
+```
+.small[Weight matrix. Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#data-manipulation)
+]
+---
 
 
