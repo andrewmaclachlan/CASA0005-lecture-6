@@ -844,6 +844,9 @@ knitr::include_graphics('img/spatial_units.png')
 ```
 .small[Spatial Units. Source:[Tower Hamlets](https://www.towerhamlets.gov.uk/Documents/Borough_statistics/Research-tools-and-guidance/RB-Census2011-Census-Geography-Guide-2013-05.pdf)]
 ---
+
+
+---
 # Spatially continous observations 
 
 Formal definition:
@@ -856,11 +859,47 @@ The (auto*)correlation among observations of a single variable (smoking rates, u
 knitr::include_graphics('img/auto_corr.png')
 ```
 
---
+.small[Moran's I. Source:[ArcGIS](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/spatial-autocorrelation.htm)
+]
 
-How do we define near and distant spatial units?
+```{r echo=FALSE, out.width='30%', fig.align='center'}
+knitr::include_graphics('img/nearest.jpeg')
+```
+.small[Nearest neighbour. Source:[Towards Data Science](https://towardsdatascience.com/building-a-k-nearest-neighbors-k-nn-model-with-scikit-learn-51209555453a)
+]
 
-What is a neighbour ? What is not a neighbour? 
+---
+# Indices of Spatial Association
+
+* Moran’s I, Geary’s C and Getis-Ord’s G are all indexes to compare values for neighbouring features
+
+* Help answer the question – **“are the values for neighbouring features more similar than those for all other features?”**
+
+* If the average difference between neighbouring features is less than between all features, values are clustered.
+
+* Can specify neighbouring based on adjacency, set distance or distance to all features – always conceived as a spatial weights matrix. 
+
+* There are global (one number for the whole system of interest) and local (individual numbers for each zone in the system) versions of both. 
+
+
+---
+# Moran's I
+
+* Most popular (best?) measure of spatial autocorrelation (SA)
+
+* Moran’s I = Do we have a clustered, random or dispersed pattern of X? 
+
+* (Morans) I statistic is a ratio that captures **if neighbouring places have more similar values when compared with their difference to the average in the system.**
+
+* Ranges from -1 (-ve SA) to 1 (+ve SA). 0 is no relationship.
+
+```{r echo=FALSE, out.width='75%', fig.align='center'}
+knitr::include_graphics('img/auto_corr.png')
+```
+
+.small[Moran's I. Source:[ArcGIS](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/spatial-autocorrelation.htm)
+]
+
 ---
 class: inverse, center, middle
 
@@ -895,7 +934,7 @@ knitr::include_graphics('img/nearest.jpeg')
 
 * We use the rules we have set - Rook, Queen, KNN or even just a distance 
 
-* We then define this in a spatial weight matrix 
+* We then define this in a spatial weight matrix which gives a numeric value to the neighbour.
   * B is the basic binary coding (1/0)
   * W is row standardised (sums over all links to n)
   * C is globally standardised (sums over all links to n)
@@ -908,4 +947,43 @@ knitr::include_graphics('img/matrix.png')
 ]
 ---
 
+# Simple example
+```{r echo=FALSE, out.width='70%', fig.align='center'}
+knitr::include_graphics('img/binary.png')
+```
+.small[Weight matrix. Source:[Adam Dennett](https://twitter.com/adam_dennett)
+]
+
+* In matrix algebra, it is convention to refer to **rows** with the index, $i$ and **columns** with the index, $j$
+* $W_{ij}$ refers to any weight in this matrix
+* $W_{13}$ =1, $W_{52}$=0 etc.
+
+---
+
+# Standardisation 
+
+Standardisation **permits comparable** spatial parameters where features might be biased due to the aggregation... 
+
+Global
+
+* Sum the weights = 18
+* Divide our units by this = 6/18 
+* Each weight is given 0.33
+
+Row
+
+* 1 is divided by the sum of the number of neighbours in each row
+* In zone 1 each weight is 0.5
+* In zone 3 each weight is 0.25
+
+**Row** standardisation is most common if you have polygons. 
+
+---
+
+# Plugging in the numbers 
+
+
+....head to the excel document
+
+---
 
