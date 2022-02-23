@@ -65,6 +65,7 @@ library(fontawesome)
 ### Point Pattern Analysis
 
 ### 21/02/2022 (updated: `r format(Sys.time(), "%d/%m/%Y")`)
+`r fa("link", fill = "white")`https://andrewmaclachlan.github.io/Spatial-analysis-of-public-health-data/#1
 .pull-left[### Andy MacLachlan
 `r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
 `r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
@@ -673,7 +674,7 @@ where:
 
 class: inverse, center, middle
 
-# Full example on GitHub repo in the excel document
+# Full example on [GitHub repo in the excel document](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/MoranI%20example.xlsx)
 
 ---
 
@@ -1007,11 +1008,13 @@ Row
 **Row** standardisation is most common if you have polygons. 
 
 ---
+class: inverse, center, middle
+
 
 # Plugging in the numbers 
 
 
-....head to the excel document
+##....head to the [excel document](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/MoranI%20example.xlsx)
 
 ---
 # Other measures of spatial autocorrelation 
