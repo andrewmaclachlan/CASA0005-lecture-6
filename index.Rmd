@@ -647,6 +647,8 @@ where:
 
 * $e$ is a constant- 2.718
 
+* $k!$ is the factorial of the number of occurences - remember $X=k$
+
 ---
 # Plugging in the numbers
 | Var1 | Freq count | Total plaques | Lambda | Probability | Expected count | Observed probability |
@@ -662,11 +664,13 @@ where:
 * Freqquad = Number of grids with that value
 * Total blue plaques = Var1*Frequency 
 * Lambda = Total blue plaques / total frequency 
+* Probability = Probability of number of plaques in quadrant ....
+
 ]
 
 .pull-right[
-* Probability = Probability of number of plaques in quadrant $$\frac{\lambda^{k}e^{-\lambda}}{k!}$$
-* Expected = Expected frequency count on the Poisson distribution 
+ $$\frac{\lambda^{k}e^{-\lambda}}{k!}$$
+* Expected = Expected frequency count on the Poisson distribution (freq count * probability)
 * Observed probability = Frequency count / sum of the frequency count
 ]
 
@@ -686,7 +690,7 @@ class: inverse, center, middle
 knitr::include_graphics('img/quadrat_plot.png')
 ```
 
-* We can test for CSR by comparing the observed and expected counts and using a test such as the chi-squared 
+* We can test for CSR by comparing the observed and expected counts and using a test such as the [chi-squared](https://edge.sagepub.com/system/files/chapter18_1.pdf) 
 
 * If our p-value is > 0.05 then this indicates that we have CSR and there is no pattern in our points. 
 
@@ -760,8 +764,8 @@ knitr::include_graphics('img/ripleyKout.png')
 * Where the value of K is below the line, the data are dispersed
 ]
 
----
 
+---
 class: inverse, center, middle
 
 # What are the issues with Ripley's K ?
@@ -835,7 +839,13 @@ BluePlaquesSubPoints%>%
 * OPTICS - extends DBSCAN and uses an algorithm to find optimum distance thresholds for clustering. 
 
 ---
+class: inverse, center, middle
 
+# The core question..
+
+> ### Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
+
+---
 class: inverse, center, middle
 
 # But... how similar is our data across geographic space?
@@ -884,7 +894,9 @@ knitr::include_graphics('img/auto_corr.png')
 
 * Moran’s I, Geary’s C and Getis-Ord’s G are all indexes to compare values for neighbouring features
 
-* Help answer the question – **“are the values for neighbouring features more similar than those for all other features?”**
+* Help answer the next core question – 
+
+.center[###“are the values for neighbouring features more similar than those for all other features?”]
 
 * If the average difference between neighbouring features is less than between all features, values are clustered.
 
@@ -928,6 +940,8 @@ knitr::include_graphics('img/neighbours.jpg')
 class: inverse, center, middle
 
 # In the classroom identify who is your neighbour? 
+
+--
 
 ### what case did you use?
 
@@ -993,6 +1007,8 @@ knitr::include_graphics('img/binary.png')
 
 Standardisation **permits comparable** spatial parameters where features might be biased due to the aggregation... 
 
+When you standardise (usually row) the fact that one unit has 20 neighbours and another 2 doesn't influence the results that much, but it would in binary. When we aggregate data the structure (e.g. polygons) aren't made for (or designed for) our point data (e.g. blue plaques, fly tipping etc). See [this ESRI help link](https://community.esri.com/t5/spatial-statistics-questions/row-standardisation-questions/td-p/440656)
+
 Global
 
 * Sum the weights = 18
@@ -1004,8 +1020,6 @@ Row
 * 1 is divided by the sum of the number of neighbours in each row
 * In zone 1 each weight is 0.5
 * In zone 3 each weight is 0.25
-
-**Row** standardisation is most common if you have polygons. 
 
 ---
 class: inverse, center, middle
@@ -1038,14 +1052,16 @@ class: inverse, center, middle
 .pull-left[
 * Global Moran's I compares each spatial unit to the neighbours and then gives an average of all the differences identified 
 
-* Local Moran's I gives a value for each spatial unit in relation to neigbhours and ...
+* Local Moran's I `localmoran(., Lward.lw)` gives a value for each spatial unit in relation to neigbhours and ...
   * Moran's I value
   * Expected Moran's I
   * Variance
   * Z score - needs the expected and variance 
   * p-value 
-  
-* We are most interested in the z score here which allows us to state if our value is significantly difference than expected at this location considering the neighours. ]
+
+* z score here allows us to state if our value is significantly difference than expected at this location considering the neighours. 
+
+]
 
 .pull-right[
 ```{r echo=FALSE, out.width='75%', fig.align='center'}
@@ -1053,6 +1069,7 @@ knitr::include_graphics('img/sig.png')
 ```
 .small[What is a z score. Source:[ArcMap](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm)
 ]
+
 * Z scores = standard deviations
 
 * High or low = unlikely that it is completely spatially random 
@@ -1061,9 +1078,6 @@ knitr::include_graphics('img/sig.png')
 
 * Middle of the normal distribution is the expected outcome
 
-```{r, eval=FALSE}
-localmoran(., Lward.lw)
-```
 
 .small[Global vs Local Spatial autocorrelation. Source:[story maps](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
 

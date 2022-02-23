@@ -32,7 +32,7 @@
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x4a60562b89244639735b8f6227c6d6b","expires":1}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"eec0d045aeb440af8b4febd7ce08328c","expires":1}</script>
     <script src="libs/himalaya/himalaya.js"></script>
     <link href="libs/editable/editable.css" rel="stylesheet" />
     <script src="libs/editable/editable.js"></script>
@@ -161,7 +161,7 @@ Teaching:
 
 # How to use the lectures
 
-- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) 🙊 shar-in-gen or [ʃæ.ˈriŋ.gæn]
+- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) 🗣 shar-in-gen or [ʃæ.ˈriŋ.gæn]
 
 - <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg> In the bottom left there is a search tool which will search all content of presentation (Control + F will also search)
 
@@ -354,7 +354,7 @@ Space is fixed, but **properties (values)** can vary
 
 * Discuss in groups for 1 min 30 seconds?
 
-<div class="countdown" id="timer_62162402" style="bottom:0;left:65%;" data-warnwhen="10">
+<div class="countdown" id="timer_62164857" style="bottom:0;left:65%;" data-warnwhen="10">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -654,6 +654,8 @@ where:
 
 * `\(e\)` is a constant- 2.718
 
+* `\(k!\)` is the factorial of the number of occurences - remember `\(X=k\)`
+
 ---
 # Plugging in the numbers
 | Var1 | Freq count | Total plaques | Lambda | Probability | Expected count | Observed probability |
@@ -669,11 +671,13 @@ where:
 * Freqquad = Number of grids with that value
 * Total blue plaques = Var1*Frequency 
 * Lambda = Total blue plaques / total frequency 
+* Probability = Probability of number of plaques in quadrant ....
+
 ]
 
 .pull-right[
-* Probability = Probability of number of plaques in quadrant `$$\frac{\lambda^{k}e^{-\lambda}}{k!}$$`
-* Expected = Expected frequency count on the Poisson distribution 
+ `$$\frac{\lambda^{k}e^{-\lambda}}{k!}$$`
+* Expected = Expected frequency count on the Poisson distribution (freq count * probability)
 * Observed probability = Frequency count / sum of the frequency count
 ]
 
@@ -691,7 +695,7 @@ class: inverse, center, middle
 
 &lt;img src="img/quadrat_plot.png" width="35%" style="display: block; margin: auto;" /&gt;
 
-* We can test for CSR by comparing the observed and expected counts and using a test such as the chi-squared 
+* We can test for CSR by comparing the observed and expected counts and using a test such as the [chi-squared](https://edge.sagepub.com/system/files/chapter18_1.pdf) 
 
 * If our p-value is &gt; 0.05 then this indicates that we have CSR and there is no pattern in our points. 
 
@@ -762,8 +766,8 @@ K &lt;- BluePlaquesSub.ppp %&gt;%
 * Where the value of K is below the line, the data are dispersed
 ]
 
----
 
+---
 class: inverse, center, middle
 
 # What are the issues with Ripley's K ?
@@ -835,7 +839,13 @@ BluePlaquesSubPoints%&gt;%
 * OPTICS - extends DBSCAN and uses an algorithm to find optimum distance thresholds for clustering. 
 
 ---
+class: inverse, center, middle
 
+# The core question..
+
+&gt; ### Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
+
+---
 class: inverse, center, middle
 
 # But... how similar is our data across geographic space?
@@ -880,7 +890,9 @@ The (auto*)correlation among observations of a single variable (smoking rates, u
 
 * Moran’s I, Geary’s C and Getis-Ord’s G are all indexes to compare values for neighbouring features
 
-* Help answer the question – **“are the values for neighbouring features more similar than those for all other features?”**
+* Help answer the next core question – 
+
+.center[###“are the values for neighbouring features more similar than those for all other features?”]
 
 * If the average difference between neighbouring features is less than between all features, values are clustered.
 
@@ -921,6 +933,8 @@ class: inverse, center, middle
 class: inverse, center, middle
 
 # In the classroom identify who is your neighbour? 
+
+--
 
 ### what case did you use?
 
@@ -980,6 +994,8 @@ Lward.lw &lt;- LWard_nb %&gt;%
 
 Standardisation **permits comparable** spatial parameters where features might be biased due to the aggregation... 
 
+When you standardise (usually row) the fact that one unit has 20 neighbours and another 2 doesn't influence the results that much, but it would in binary. When we aggregate data the structure (e.g. polygons) aren't made for (or designed for) our point data (e.g. blue plaques, fly tipping etc). See [this ESRI help link](https://community.esri.com/t5/spatial-statistics-questions/row-standardisation-questions/td-p/440656)
+
 Global
 
 * Sum the weights = 18
@@ -991,8 +1007,6 @@ Row
 * 1 is divided by the sum of the number of neighbours in each row
 * In zone 1 each weight is 0.5
 * In zone 3 each weight is 0.25
-
-**Row** standardisation is most common if you have polygons. 
 
 ---
 class: inverse, center, middle
@@ -1025,19 +1039,22 @@ class: inverse, center, middle
 .pull-left[
 * Global Moran's I compares each spatial unit to the neighbours and then gives an average of all the differences identified 
 
-* Local Moran's I gives a value for each spatial unit in relation to neigbhours and ...
+* Local Moran's I `localmoran(., Lward.lw)` gives a value for each spatial unit in relation to neigbhours and ...
   * Moran's I value
   * Expected Moran's I
   * Variance
   * Z score - needs the expected and variance 
   * p-value 
-  
-* We are most interested in the z score here which allows us to state if our value is significantly difference than expected at this location considering the neighours. ]
+
+* z score here allows us to state if our value is significantly difference than expected at this location considering the neighours. 
+
+]
 
 .pull-right[
 &lt;img src="img/sig.png" width="75%" style="display: block; margin: auto;" /&gt;
 .small[What is a z score. Source:[ArcMap](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm)
 ]
+
 * Z scores = standard deviations
 
 * High or low = unlikely that it is completely spatially random 
@@ -1046,10 +1063,6 @@ class: inverse, center, middle
 
 * Middle of the normal distribution is the expected outcome
 
-
-```r
-localmoran(., Lward.lw)
-```
 
 .small[Global vs Local Spatial autocorrelation. Source:[story maps](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
 
