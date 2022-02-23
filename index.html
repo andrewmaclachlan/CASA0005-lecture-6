@@ -32,7 +32,7 @@
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"e39e9925d9994a85a430bd8cd9365e16","expires":1}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xbe31ad7bec847f5b0abf497c812d4ab","expires":1}</script>
     <script src="libs/himalaya/himalaya.js"></script>
     <link href="libs/editable/editable.css" rel="stylesheet" />
     <script src="libs/editable/editable.js"></script>
@@ -353,7 +353,7 @@ Space is fixed, but **properties (values)** can vary
 
 * Discuss in groups for 1 min 30 seconds?
 
-<div class="countdown" id="timer_62160116" style="bottom:0;left:65%;" data-warnwhen="10">
+<div class="countdown" id="timer_62162255" style="bottom:0;left:65%;" data-warnwhen="10">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -809,9 +809,29 @@ If point in neighbourhood of a core point but has &lt;MinPts in its own neighbou
 
 # DBSCAN
 
+In R DBCAN is simply...
+
+
+```r
+db &lt;- BluePlaquesSubPoints %&gt;%
+  fpc::dbscan(.,eps = 700, MinPts = 4)
+```
+
 How to select values
 
-OPTICS
+* Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value 
+
+* Or plot the average  distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
+
+
+```r
+BluePlaquesSubPoints%&gt;%
+  dbscan::kNNdistplot(.,k=4)
+```
+
+* Min points: start with what you think is appropriate 
+
+* OPTICS - extends DBSCAN and uses an algorithm to find optimum distance thresholds for clustering. 
 
 ---
 
@@ -839,8 +859,6 @@ But this does depend on our level of aggregation here...
 
 &lt;img src="img/spatial_units.png" width="32%" style="display: block; margin: auto;" /&gt;
 .small[Spatial Units. Source:[Tower Hamlets](https://www.towerhamlets.gov.uk/Documents/Borough_statistics/Research-tools-and-guidance/RB-Census2011-Census-Geography-Guide-2013-05.pdf)]
----
-
 
 ---
 # Spatially continous observations 
@@ -854,10 +872,6 @@ The (auto*)correlation among observations of a single variable (smoking rates, u
 &lt;img src="img/auto_corr.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 .small[Moran's I. Source:[ArcGIS](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/spatial-autocorrelation.htm)
-]
-
-&lt;img src="img/nearest.jpeg" width="30%" style="display: block; margin: auto;" /&gt;
-.small[Nearest neighbour. Source:[Towards Data Science](https://towardsdatascience.com/building-a-k-nearest-neighbors-k-nn-model-with-scikit-learn-51209555453a)
 ]
 
 ---
@@ -884,6 +898,12 @@ The (auto*)correlation among observations of a single variable (smoking rates, u
 * (Morans) I statistic is a ratio that captures **if neighbouring places have more similar values when compared with their difference to the average in the system.**
 
 * Ranges from -1 (-ve SA) to 1 (+ve SA). 0 is no relationship.
+
+
+```r
+moran.test(., Lward.lw)
+```
+
 
 &lt;img src="img/auto_corr.png" width="75%" style="display: block; margin: auto;" /&gt;
 
@@ -916,15 +936,30 @@ class: inverse, center, middle
 
 # GIS what is a neighbour
 
-* We use the rules we have set - Rook, Queen, KNN or even just a distance 
+* We use the rules we have set - Rook, Queen, KNN or even just a distance for a list of neighbours 
+
+```r
+#create a neighbours list
+LWard_nb &lt;- points_sf_joined %&gt;%
+  poly2nb(., queen=T)
+```
 
 * We then define this in a spatial weight matrix which gives a numeric value to the neighbour.
   * B is the basic binary coding (1/0)
   * W is row standardised (sums over all links to n)
   * C is globally standardised (sums over all links to n)
+  
 
+```r
+#create a spatial weights matrix from these weights
+Lward.lw &lt;- LWard_nb %&gt;%
+  nb2mat(., style="B")
+```
+---
 
-&lt;img src="img/matrix.png" width="50%" style="display: block; margin: auto;" /&gt;
+# GIS what is a neighbour 2
+
+&lt;img src="img/matrix.png" width="100%" style="display: block; margin: auto;" /&gt;
 .small[Weight matrix. Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#data-manipulation)
 ]
 ---
@@ -966,7 +1001,119 @@ Row
 ....head to the excel document
 
 ---
+# Other measures of spatial autocorrelation 
 
+* Geary's C
+  * This tells us whether **similar values or dissimilar values are clustering**
+  
+  * Geary’s C falls between 0 and 2; 1 means no spatial autocorrelation, &lt;1 - positive spatial autocorrelation or similar values clustering, &gt;1 - negative spatial autocorreation or dissimilar values clustering) which shows that similar values are clustering
+
+* Getis Ord General G
+  * This tells us whether **high or low values are clustering**. 
+  
+  * If G &gt; Expected = High values clustering; if G &lt; expected = low values clustering
+
+* Moran's I
+  * Tells us whether we have clustered values (close to 1) or dispersed values (close to -1)
+  
+---
+# Local versions - Anselin Moran's I
+
+.pull-left[
+* Global Moran's I compares each spatial unit to the neighbours and then gives an average of all the differences identified 
+
+* Local Moran's I gives a value for each spatial unit in relation to neigbhours and ...
+  * Moran's I value
+  * Expected Moran's I
+  * Variance
+  * Z score - needs the expected and variance 
+  * p-value 
+  
+* We are most interested in the z score here which allows us to state if our value is significantly difference than expected at this location considering the neighours. ]
+
+.pull-right[
+&lt;img src="img/sig.png" width="75%" style="display: block; margin: auto;" /&gt;
+.small[What is a z score. Source:[ArcMap](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm)
+]
+* Z scores = standard deviations
+
+* High or low = unlikely that it is completely spatially random 
+
+* We reject the null hypothesis (complete spatial randomness)
+
+* Middle of the normal distribution is the expected outcome
+
+
+```r
+localmoran(., Lward.lw)
+```
+
+.small[Global vs Local Spatial autocorrelation. Source:[story maps](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
+
+]
+
+]
+
+---
+
+class: inverse, center, middle
+
+# Local versions - Anselin Moran's I
+
+### Remember what the values mean
+
+### Moran's I tells us whether we have clustered values (close to 1) or dispersed values (close to -1)
+
+---
+
+# Local versions - Getis-Ord Gi* 
+
+* Pronounced G-i-star
+
+* Similar concept but just returns a z score 
+
+* More intense clustering of high values = hot spot 
+
+* More intense clustering of low values = cold spot 
+
+
+```r
+localG(., Lward.lw)
+```
+
+
+---
+# Limitations 
+
+* Calculating the neighbours is computationally intensive. Creates an n2 matrix.
+
+* So 10 spatial units is manageable, but 1000 requires 1,000,000 comparisons, and 10,000 100,000,000 etc. 
+
+* This is very important as defining spatial weights matrices is crucial for running other types of analysis – spatially-lagged regression or Geographical Weighted Regression (which we will come onto in subsequent weeks)
+
+* Global measures can mask local trends (although local versions deal with this to an extent)
+
+* Indices of spatial association can be a good summary of the system, but it’s never possible to capture all complex spatial interactions in a single figure
+
+---
+# Summary
+
+* Point Pattern Analysis techniques all compare observed distributions of points to an expected model based on the Poisson distribution – with varying degrees of sophistication
+
+* Analysis of the spatial autocorrelation of continuous variables over space allows us to assess if similar values cluster in space
+
+* How we define neighbours is crucial in spatial autocorrelation analysis
+
+---
+class: inverse, center, middle
+
+# Final task
+
+### Consider the tools for point pattern anslysis and spatial autocorrelcation and write down what each can show...e.g...
+
+### Moran's I shows if neighbouring places have more similar (or dissimilar) values when compared with their difference to the average in the system
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
