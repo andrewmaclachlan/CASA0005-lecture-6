@@ -1143,4 +1143,6 @@ class: inverse, center, middle
 
 ### Moran's I shows if neighbouring places have more similar (or dissimilar) values when compared with their difference to the average in the system
 
+### Practical: https://rpubs.com/AndrewMacLachlan/870348
+
 ---
