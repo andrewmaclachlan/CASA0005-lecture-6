@@ -678,7 +678,7 @@ where:
 
 class: inverse, center, middle
 
-# Full example on [GitHub repo in the excel document](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/MoranI%20example.xlsx)
+# Full example on [GitHub repo in the excel document](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/Poisson_example.xlsx)
 
 ---
 
