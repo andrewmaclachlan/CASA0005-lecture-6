@@ -164,7 +164,7 @@ class: inverse, center, middle
   * Defining near and distant things
   * Measuring spatial autocorrelation
     * Moran’s I
-    * LISA
+    * LISA (Local indicators of spatial association)
 
 ]
 
@@ -403,7 +403,7 @@ I've assumed the following:
   * [Spatial features (sf)](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#background-to-spatial-data-in-r)
   * [Coordinate reference systems (e.g. geographic and projected)](https://andrewmaclachlan.github.io/CASA0005repo/spatial-descriptive-statistics.html#part-1-projections)
 
-Usually the i'd gauge this now and adjust what we talk about...but Laura can pause here and address any questions...
+Usually i'd gauge this now and adjust what we talk about...but Laura can pause here and address any questions...
 
 The lecture is primarily for the theory and the practical will go over the code. 
 ---
@@ -797,9 +797,10 @@ knitr::include_graphics('img/ripleyKout.png')
 * Where the value of K falls above the line, the data appear to be clustered at that distance (up to 1300 metres). 
 
 * Where the value of K is below the line, the data are dispersed
+]
 
 * But what about planning constraints? Parks? Streets? Relative or absolute clustering?
-]
+
 
 ???
 
