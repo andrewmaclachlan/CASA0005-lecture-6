@@ -32,7 +32,7 @@
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xafe6d52aa98454f84acd839bef04197","expires":1}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xc1fa348222044138a505a6ef36437df","expires":1}</script>
     <script src="libs/himalaya/himalaya.js"></script>
     <link href="libs/editable/editable.css" rel="stylesheet" />
     <script src="libs/editable/editable.js"></script>
@@ -161,7 +161,7 @@ Teaching:
 
 # How to use the lectures
 
-- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) 🗣 shar-in-gen or [ʃæ.ˈriŋ.gæn]
+- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) 🙊 shar-in-gen or [ʃæ.ˈriŋ.gæn]
 
 - <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg> In the bottom left there is a search tool which will search all content of presentation (Control + F will also search)
 
@@ -219,6 +219,8 @@ Two halves:
 * Point data (or categorical data in space - lines / polygons)
 
 * Spatially referenced observations - where regions of a map are similar = clustering of values = spatial autocorrelation. 
+
+* Methods to detect if these patterns are there or not - it might just be use seeing them
 ---
 # Questions we can ask / set
 
@@ -253,6 +255,13 @@ How (dis)similar are our values assigned to geographic units across geographic s
 ]
 ]
 
+???
+
+John snow often attributed with identifying the outbreak at the broad street pump
+Data was from mortality reports issued by the Registrar General Office not surveys
+Snow wasn't responsible directly, but it contributed to the knowledge 
+Snow also didn't event this mapping style - 1798 New York outbreak of Yellow fever - Valentine Seaman 
+Second version of the map in 1855 had distance to pump - first voroni diagram 
 ---
 
 # What patterns show
@@ -261,14 +270,6 @@ How (dis)similar are our values assigned to geographic units across geographic s
 
 .small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
 ]
-
-???
-
-John snow often attributed with identifying the outbreak at the broad street pump
-Data was from mortality reports issued by the Registrar General Office not surveys
-Snow wasn't responsible directly, but it contributed to the knowledge 
-Snow also didn't event this mapping style - 1798 New York outbreak of Yellow fever - Valentine Seaman 
-Second version of the map in 1855 had distance to pump - first voroni diagram 
 
 ---
 
@@ -282,7 +283,7 @@ Second version of the map in 1855 had distance to pump - first voroni diagram
 
 ???
 
-* Similar methods 
+* Similar methods that we will use today - incidences of lung cancer relative to the physical envrionment - are they clustered and where? ...leads to why
 * are the locations of lung cancer similar?
 * Does the incinerator have any influence ?
 ---
@@ -297,6 +298,10 @@ Second version of the map in 1855 had distance to pump - first voroni diagram
 
 .small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&amp;originRegion=eu-west-1&amp;originCreation=20220221114112)
 ]
+
+???
+
+Mortality and deprivation - clear mortality areas - what else is happening here?
 
 ---
 
@@ -328,6 +333,10 @@ Space is fixed, but **properties (values)** can vary
 
 ]
 
+???
+
+Properties - the location of the point is fixed - there or not, binary
+Space fixed - the spatial units fixed - boundary but properties (values) vary. 
 ---
 
 # Examples
@@ -364,7 +373,7 @@ Space is fixed, but **properties (values)** can vary
 
 * Discuss in groups for 1 min 30 seconds?
 
-<div class="countdown" id="timer_621cbe2f" style="bottom:0;left:65%;" data-warnwhen="10">
+<div class="countdown" id="timer_621cf53f" style="bottom:0;left:65%;" data-warnwhen="10">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -495,7 +504,9 @@ Taking our points and comparing something random with real life distribution
 
 If there is a difference then there is something going on...
 
-Get the normal distirubtion everytime
+Get the normal distribution every time - weight machine at a gym 
+
+
 
 ---
 
@@ -578,19 +589,19 @@ Breweries in London around 2017 - what the probability of finding a brewery is i
 
 # The Poisson Distribution 3
 
-### Rules
+### Rules / applies when 
 
 * The events are discrete and can be counted in integers
 * Events are independent of each other
-* The average number of events over space or time is known
+* The average number of events over space (or time) is known
 
 ### Use
 
 * It’s very useful in Point Pattern Analysis as it allows us to compare a random expected model to our observations
 
-* Where our data **do not fit the Poisson model, then something interesting might be going on!** 
+* Where our data **do not fit the Poisson model, then something interesting might be going on!**
 
-* Our events might not be independent of each other – they might be clustered or dispersed and something might be causing this…
+* Our events might not be independent of each other – they might be clustered or dispersed and something might be causing this...
 
 ---
 # Testing for CSR - Point Pattern Analysis
@@ -616,6 +627,10 @@ Breweries in London around 2017 - what the probability of finding a brewery is i
  **Compare the observed occurrences with a CSR Poisson model...**
  
  Note, be careful with CSR and CRS]
+ 
+???
+ 
+ * Often done at school count the occurence in a square
 ---
 
 # In code...
@@ -691,6 +706,10 @@ where:
 * Observed probability = Frequency count / sum of the frequency count
 ]
 
+???
+
+* Count the number in square, then work out the mean in each given square
+* Compare the observation to our expectation - and chi square will tell us if significant. 
 ---
 
 class: inverse, center, middle
@@ -750,6 +769,12 @@ class: inverse, center, middle
 .pull-right[
 &lt;img src="img/ripleyK.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
+
+???
+
+* Deals with the issue of square quadrants
+* Analysis on the whole space
+
 ---
 # Ripley's K is simply...
 
@@ -774,8 +799,14 @@ K &lt;- BluePlaquesSub.ppp %&gt;%
 * Where the value of K falls above the line, the data appear to be clustered at that distance (up to 1300 metres). 
 
 * Where the value of K is below the line, the data are dispersed
+
+* But what about planning constraints? Parks? Streets? Relative or absolute clustering?
 ]
 
+???
+
+* Some things can't be randomly distributed - parks, planning permissions?
+* Absolute or relative clustering? - the clustering of other events?
 
 ---
 class: inverse, center, middle
@@ -819,6 +850,11 @@ If point in neighbourhood of a core point but has &lt;MinPts in its own neighbou
 .small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#density-based-spatial-clustering-of-applications-with-noise-dbscan)]
 
 ]
+
+???
+
+* If there are points within my radius then will call this a cluster 
+* Define clusters of shapes and sizes - 2 values needed
 
 ---
 
@@ -910,6 +946,10 @@ The (auto*)correlation among observations of a single variable (smoking rates, u
 
 * There are global (one number for the whole system of interest) and local (individual numbers for each zone in the system) versions of both. 
 
+???
+
+Are the values in near places similar or dissimilar 
+
 
 ---
 # Moran's I
@@ -932,6 +972,10 @@ moran.test(., Lward.lw)
 
 .small[Moran's I. Source:[ArcGIS](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/spatial-autocorrelation.htm)
 ]
+
+???
+
+To be able to do this we need to know what boundaries each polygon shares with others - boundary relationships 
 
 ---
 class: inverse, center, middle
@@ -998,25 +1042,29 @@ Lward.lw &lt;- LWard_nb %&gt;%
 * `\(W_{ij}\)` refers to any weight in this matrix
 * `\(W_{13}\)` =1, `\(W_{52}\)`=0 etc.
 
+???
+
+* W = weight
+* i = row and j = column 
+* Zone 1 - neighbours with zone 2 and 3, and so has a value of 1
+
 ---
 
-# Standardisation 
+# Standardisation of matrix
 
 Standardisation **permits comparable** spatial parameters where features might be biased due to the aggregation... 
 
 When you standardise (usually row) the fact that one unit has 20 neighbours and another 2 doesn't influence the results that much, but it would in binary. When we aggregate data the structure (e.g. polygons) aren't made for (or designed for) our point data (e.g. blue plaques, fly tipping etc). See [this ESRI help link](https://community.esri.com/t5/spatial-statistics-questions/row-standardisation-questions/td-p/440656)
 
 Global
-
 * Sum the weights = 18
 * Divide our units by this = 6/18 
 * Each weight is given 0.33
 
 Row
-
 * 1 is divided by the sum of the number of neighbours in each row
-* In zone 1 each weight is 0.5
-* In zone 3 each weight is 0.25
+* In zone 1 each weight is 0.5 - Binary it would sum to 2 
+* In zone 3 each weight is 0.25 - Binary it would sum to 4
 
 ---
 class: inverse, center, middle
@@ -1025,7 +1073,7 @@ class: inverse, center, middle
 # Plugging in the numbers 
 
 
-##....head to the [excel document](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/MoranI%20example.xlsx)
+##....head to the [excel document for a Moran's I example with the formula](https://github.com/andrewmaclachlan/Spatial-analysis-of-public-health-data/blob/main/MoranI%20example.xlsx)
 
 ---
 # Other measures of spatial autocorrelation 
@@ -1042,9 +1090,10 @@ class: inverse, center, middle
 
 * Moran's I
   * Tells us whether we have clustered values (close to 1) or dispersed values (close to -1)
-  
+
+
 ---
-# Local versions - Anselin Moran's I
+# Local versions (LISA) - Anselin Moran's I
 
 .pull-left[
 * Global Moran's I compares each spatial unit to the neighbours and then gives an average of all the differences identified 
@@ -1080,6 +1129,9 @@ class: inverse, center, middle
 
 ]
 
+???
+
+LISA = Local indicators of spatial association 
 ---
 
 class: inverse, center, middle
@@ -1088,7 +1140,11 @@ class: inverse, center, middle
 
 ### Remember what the values mean
 
-### Moran's I tells us whether we have clustered values (close to 1) or dispersed values (close to -1) **for local this is in relation to it's neighbours**...for global it's all values as an average
+### Moran's I tells us whether we have clustered values (close to 1) or dispersed values (close to -1) 
+
+### **for local this is in relation to its neighbours**...
+
+### for global it's all values as an average
 
 ---
 
@@ -1112,7 +1168,7 @@ localG(., Lward.lw)
 ---
 # Limitations 
 
-* Calculating the neighbours is computationally intensive. Creates an n2 matrix.
+* Calculating the neighbours is computationally intensive. Creates an `\(n^2\)` matrix.
 
 * So 10 spatial units is manageable, but 1000 requires 1,000,000 comparisons, and 10,000 100,000,000 etc. 
 
@@ -1127,8 +1183,7 @@ localG(., Lward.lw)
 
 #### Points
 
-* Are these points distributed in a random way or is there some sort of pattern (uniform or #
-clustered)?
+* Are these points distributed in a random way or is there some sort of pattern (uniform or  clustered)?
 
 * Point Pattern Analysis techniques all compare observed distributions of points to an expected model based on the Poisson distribution – with varying degrees of sophistication
 
