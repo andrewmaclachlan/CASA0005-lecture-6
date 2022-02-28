@@ -187,7 +187,17 @@ Two halves:
 
 * Spatially referenced observations - where regions of a map are similar = clustering of values = spatial autocorrelation. 
 ---
+# Questions we can ask / set
 
+## Points
+
+Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
+
+## Spatially continuous observations (e.g. values of polygons)
+
+How (dis)similar are our values assigned to geographic units across geographic space
+
+---
 # The first (?) point pattern analysis 
 
 ### Dr John Snow
@@ -1093,7 +1103,7 @@ class: inverse, center, middle
 
 ### Remember what the values mean
 
-### Moran's I tells us whether we have clustered values (close to 1) or dispersed values (close to -1)
+### Moran's I tells us whether we have clustered values (close to 1) or dispersed values (close to -1) **for local this is in relation to it's neighbours**...for global it's all values as an average
 
 ---
 
@@ -1101,7 +1111,8 @@ class: inverse, center, middle
 
 * Pronounced G-i-star
 
-* Similar concept but just returns a z score 
+* Similar concept but just returns a z score
+  * standardised value relating to whether high values or low values are clustering together
 
 * More intense clustering of high values = hot spot 
 
@@ -1128,7 +1139,16 @@ localG(., Lward.lw)
 ---
 # Summary
 
+#### Points
+
+* Are these points distributed in a random way or is there some sort of pattern (uniform or #
+clustered)?
+
 * Point Pattern Analysis techniques all compare observed distributions of points to an expected model based on the Poisson distribution – with varying degrees of sophistication
+
+#### Spatially continuous observations (e.g. values of polygons)
+
+* How (dis)similar are our values assigned to geographic units across geographic space
 
 * Analysis of the spatial autocorrelation of continuous variables over space allows us to assess if similar values cluster in space
 
@@ -1143,6 +1163,7 @@ class: inverse, center, middle
 
 ### Moran's I shows if neighbouring places have more similar (or dissimilar) values when compared with their difference to the average in the system
 
+### Local Moran's I shows....?
+
 ### Practical: https://rpubs.com/AndrewMacLachlan/870348
 
----
