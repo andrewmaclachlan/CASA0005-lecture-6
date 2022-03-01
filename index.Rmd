@@ -580,7 +580,6 @@ Breweries in London around 2017 - what the probability of finding a brewery is i
 <p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/FdcFWP1nyRQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 
 ---
-
 # The Poisson Distribution 3
 
 ### Rules / applies when 
@@ -626,7 +625,14 @@ knitr::include_graphics('img/blue_plaques_in_harrow.png')
  
 ???
  
- * Often done at school count the occurence in a square
+ * Often done at school count the occurrence in a square
+
+---
+
+class: inverse, center, middle
+
+# How do we apply this to spatial data ?
+
 ---
 
 # In code...
@@ -819,11 +825,12 @@ class: inverse, center, middle
 ### Computationally intensive when there are lots of points to consider
 ### Extent of the study area can affect the calculation... eventually the radius around any point will include all other points in the study area
 ### Phenomenon being studied cannot just occur anywhere (e.g. a river) - it's not network distance but Euclidean 
+### We need clustering relative to other points (e.g. hotels, schools, dentists) in our study area?
 
 ---
 class: inverse, center, middle
 
-# We still don't know where are clusters are ?
+# We still don't know where the clusters are ?
 
 ---
 # Density-based spatial clustering of applications with noise (DBSCAN)
@@ -1119,7 +1126,7 @@ class: inverse, center, middle
   * Z score - needs the expected and variance 
   * p-value 
 
-* z score here allows us to state if our value is significantly difference than expected at this location considering the neighours. 
+* z score here allows us to state if our value is significantly different than expected at this location considering the neighours. 
 
 ]
 
