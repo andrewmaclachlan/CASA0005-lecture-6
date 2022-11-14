@@ -963,7 +963,9 @@ where:
 
 * $e$ is a constant- 2.718
 
-* $k!$ is the factorial of the number of occurences - remember $X=k$
+* $k!$ is the factorial of the number of occurences $((e.g. 4! = 1*2*3*4))$
+
+* Here, remember $X=k$ - they are the same here.
 
 ---
 # Plugging in the numbers
@@ -1279,11 +1281,31 @@ class: inverse, center, middle
 > ### Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
 
 ---
+
+# Adam's paper on beer...
+
+.pull-left[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/beer.png')
+```
+]
+
+.pull-right[
+
+* Is there anything interesting about the spatial distribution of Breweries in London?
+
+* Hypothesis: If terroir [environmental factors] and local provenance confer brand [stakeholders] (and financial) advantage, then dispersal is likely. If sharing of knowledge, resources (hardware, recipes, staff, customers) more important, then clustering likely. 
+]
+
+---
+
 class: inverse, center, middle
 
 # But... how similar is our data across geographic space?
 
-#### sort of.. we are now considering spatially continous data (e.g. density of the points) as opposed to the points themselves...remember the quote from Gimmond 2022...
+#### sort of.. we are now considering spatially continous data (e.g. density of the points) as opposed to the points themselves... 
+
+#### But when we move to spatial units ...be careful...as Gimmond 2022 states...
 
 >you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!
 
