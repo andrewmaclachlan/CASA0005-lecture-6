@@ -19,7 +19,7 @@
     <script src="libs/fabric/fabric.min.js"></script>
     <link href="libs/xaringanExtra-scribble/scribble.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-scribble/scribble.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30}) })</script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
     <script src="libs/mark.js/mark.min.js"></script>
     <link href="libs/xaringanExtra-search/search.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-search/search.js"></script>
@@ -32,7 +32,7 @@
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x529dcdcd4574e13a77be89468d6c653","expires":1}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xc61f76292f540f5a8269cb4c69a902e","expires":1}</script>
     <script src="libs/himalaya/himalaya.js"></script>
     <link href="libs/editable/editable.css" rel="stylesheet" />
     <script src="libs/editable/editable.js"></script>
@@ -57,7 +57,12 @@
 
 
 
-class: inverse, center, title-slide, middle
+class: center, title-slide, middle
+
+background-image: url("img/CASA_Logo_no_text_trans_17.png")
+background-size: cover
+background-position: center
+
 
 &lt;style&gt;
 .title-slide .remark-slide-number {
@@ -67,40 +72,26 @@ class: inverse, center, title-slide, middle
 
 
 
-# Spatial analysis of public health data
+# Point Pattern / Spatial Autocorrelation Analysis
 
-### Point Pattern Analysis
-
-### 21/02/2022 (updated: 01/03/2022)
-<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg>https://andrewmaclachlan.github.io/Spatial-analysis-of-public-health-data/#1
-.pull-left[### Andy MacLachlan
-<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"/></svg>[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
-<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>[andymaclachlan](https://twitter.com/andymaclachlan)
-<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>[andrewmaclachlan](https://github.com/andrewmaclachlan)]
-
-.pull-right[### Laura Sheppard
-<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"/></svg>[laura.sheppard.20@ucl.ac.uk](mailto:laura.sheppard.20@ucl.ac.uk)
-<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>[laurahsheppard](https://twitter.com/laurahsheppard)
-<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>[LauraSheppard](https://github.com/LauraSheppard)]
-
-
-<svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0z"/></svg>[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
-
-Slide acknowledgement: [Professor Adam Dennett](https://twitter.com/adam_dennett)
+### 21/02/2022 (updated: 14/11/2022)
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#562457;overflow:visible;position:relative;"><path d="M511.6 36.86l-64 415.1c-1.5 9.734-7.375 18.22-15.97 23.05c-4.844 2.719-10.27 4.097-15.68 4.097c-4.188 0-8.319-.8154-12.29-2.472l-122.6-51.1l-50.86 76.29C226.3 508.5 219.8 512 212.8 512C201.3 512 192 502.7 192 491.2v-96.18c0-7.115 2.372-14.03 6.742-19.64L416 96l-293.7 264.3L19.69 317.5C8.438 312.8 .8125 302.2 .0625 289.1s5.469-23.72 16.06-29.77l448-255.1c10.69-6.109 23.88-5.547 34 1.406S513.5 24.72 511.6 36.86z"/></svg>[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
+<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#562457;overflow:visible;position:relative;"><path d="M459.4 151.7c.325 4.548 .325 9.097 .325 13.65 0 138.7-105.6 298.6-298.6 298.6-59.45 0-114.7-17.22-161.1-47.11 8.447 .974 16.57 1.299 25.34 1.299 49.06 0 94.21-16.57 130.3-44.83-46.13-.975-84.79-31.19-98.11-72.77 6.498 .974 12.99 1.624 19.82 1.624 9.421 0 18.84-1.3 27.61-3.573-48.08-9.747-84.14-51.98-84.14-102.1v-1.299c13.97 7.797 30.21 12.67 47.43 13.32-28.26-18.84-46.78-51.01-46.78-87.39 0-19.49 5.197-37.36 14.29-52.95 51.65 63.67 129.3 105.3 216.4 109.8-1.624-7.797-2.599-15.92-2.599-24.04 0-57.83 46.78-104.9 104.9-104.9 30.21 0 57.5 12.67 76.67 33.14 23.72-4.548 46.46-13.32 66.6-25.34-7.798 24.37-24.37 44.83-46.13 57.83 21.12-2.273 41.58-8.122 60.43-16.24-14.29 20.79-32.16 39.31-52.63 54.25z"/></svg>[andymaclachlan](https://twitter.com/andymaclachlan)
+<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#562457;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>[andrewmaclachlan](https://github.com/andrewmaclachlan)
+<svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#562457;overflow:visible;position:relative;"><path d="M168.3 499.2C116.1 435 0 279.4 0 192C0 85.96 85.96 0 192 0C298 0 384 85.96 384 192C384 279.4 267 435 215.7 499.2C203.4 514.5 180.6 514.5 168.3 499.2H168.3zM192 256C227.3 256 256 227.3 256 192C256 156.7 227.3 128 192 128C156.7 128 128 156.7 128 192C128 227.3 156.7 256 192 256z"/></svg>[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
 
 &lt;a href="https://github.com/andrewmaclachlan" class="github-corner" aria-label="View source on GitHub"&gt;&lt;svg width="80" height="80" viewBox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"&gt;&lt;path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"&gt;&lt;/path&gt;&lt;path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"&gt;&lt;/path&gt;&lt;path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;style&gt;.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}&lt;/style&gt;
-
 ---
 <div>
 <style type="text/css">.xaringan-extra-logo {
-width: 110px;
+width: 50px;
 height: 128px;
 z-index: 0;
 background-image: url(img/casa_logo.jpg);
 background-size: contain;
 background-repeat: no-repeat;
 position: absolute;
-top:1em;right:1em;
+top:1em;right:2em;
 }
 </style>
 <script>(function () {
@@ -125,49 +116,17 @@ top:1em;right:1em;
 })()</script>
 </div>
 
-# About me
-
-* Undergraduate in human geography, University of Sheffield + year abroad at the University of Wollongong
-
-* MSc in Remote Sensing and GIS, University of Southampton 
-
-* PhD in Geography and Environmental Science, University of Southampton / University of Western Australia "Earth Observation for Quantifying Urban Growth and its Application to Sustainable City Development"
-
-* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis + lead our MSc in Smart Cities and Urban Analytics becoming Urban Spatial Science
-
-* [Research:](https://scholar.google.com/citations?user=wLrJwyQAAAAJ&amp;hl=en)
-  * Geospatial tools / data for sustainable planning and environmental decision making 
-  
-* Teaching:
-  * [Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/)
-  * [Remotely Sensing Cities and Environments](https://andrewmaclachlan.github.io/CASA0023/)  
----
-
-# About Laura
-
-* Undergraduate degree in Geography with Quantitative Research Methods, University of Bristol
-* Master’s degree in Advanced Quantitative Methods, University of Bristol
-* PhD degree (started in September 2020) in Advanced Spatial Analysis at CASA, UCL
-
-Research:
-* PhD is on Gendering the Research Pipeline and Diversifying Doctoral Education – includes gender and higher educational inequalities using data science and machine learning (validation, ensemble models, gender inferencing algorithms, text &amp; pdf analysis, multilevel modelling, mapping, visualisations etc.)
-
-Teaching:
-* Taught on Geographic Information Systems and Science module in CASA for the last two years 
-* Associate Fellow of Higher Education Academy
-
-
----
-
 # How to use the lectures
 
-- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) 🗣 shar-in-gen or [ʃæ.ˈriŋ.gæn]
+- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1)
 
-- <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg> In the bottom left there is a search tool which will search all content of presentation (Control + F will also search)
+- <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z"/></svg> In the bottom left there is a search tool which will search all content of presentation
+
+- Control + F will also search 
 
 - Press enter to move to the next result 
 
-- <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-right:0.2em;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg> In the top right let's you draw on the slides, although these aren't saved.
+- <svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"/></svg> In the top right let's you draw on the slides, although these aren't saved.
 
 - Pressing the letter `o` (for overview) will allow you to see an overview of the whole presentation and go to a slide
 
@@ -175,7 +134,6 @@ Teaching:
 
 - Pressing alt+F will fit the slide to the screen, this is useful if you have resized the window and have another open - side by side. 
 
-- Pressing h will show the help 
 
 ---
 
@@ -187,12 +145,13 @@ class: inverse, center, middle
 # Outline
 
 .pull-left[
-* The importance of pattern
+* The importance of patterns
 
 * Patterns of categorical point data – Point Pattern Analysis
   * Quadrat Analysis
   * Ripley’s K
   * DBSCAN
+  * HDBSCAN
 
 * Patterns of spatially referenced continuous observations
   * Spatial autocorrelation
@@ -221,14 +180,23 @@ Two halves:
 * Spatially referenced observations - where regions of a map are similar = clustering of values = spatial autocorrelation. 
 
 * Methods to detect if these patterns are there or not - it might just be use seeing them
+
 ---
+
+class: inverse, center, middle
+
+# Part 1: Point Pattern Analysis
+
+
+---
+
 # Questions we can ask / set
 
-## Points
+**Points**
 
 Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
 
-## Spatially continuous observations (e.g. values of polygons)
+**Spatially continuous observations (e.g. values of polygons)**
 
 How (dis)similar are our values assigned to geographic units across geographic space
 
@@ -247,11 +215,12 @@ How (dis)similar are our values assigned to geographic units across geographic s
 
 --
 
+
 .pull-right[
 
 &lt;img src="img/John_Snow.jpg" width="60%" style="display: block; margin: auto;" /&gt;
 
-.small[John Snow. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+.small[John Snow 1813-1858. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
 ]
 ]
 
@@ -260,8 +229,362 @@ How (dis)similar are our values assigned to geographic units across geographic s
 John snow often attributed with identifying the outbreak at the broad street pump
 Data was from mortality reports issued by the Registrar General Office not surveys
 Snow wasn't responsible directly, but it contributed to the knowledge 
-Snow also didn't event this mapping style - 1798 New York outbreak of Yellow fever - Valentine Seaman 
-Second version of the map in 1855 had distance to pump - first voroni diagram 
+Snow also didn't event this mapping style - 1795 New York outbreak of Yellow fever - Valentine Seaman 
+---
+# Background
+
+.pull-left[
+
+* In response to the Cholera outbreak in 1854 
+
+* This was the third outbreak the city had seen....
+
+* John Snow saw a pattern from those dying of the disease ...
+
+* a **spatial pattern**
+
+* He was a doctor and pioneered the use of anesthesia 
+]
+
+.pull-right[
+
+Cartoon (dated 1852) showing that cholera was from social overcrowding associated with the industrial revolution as opposed to polluted water...
+
+&lt;img src="img/king-cholera-wellcome.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+
+.small[A court for king cholera. Source:[Science museum](https://www.sciencemuseum.org.uk/objects-and-stories/medicine/cholera-victorian-london)
+]
+
+]
+
+---
+# Famous map! 
+
+
+&lt;img src="img/cholera.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+---
+
+
+# History of point pattern
+
+
+.pull-left[
+
+* John snow often attributed with identifying the outbreak at the broad street pump
+
+* Data was from mortality reports **issued by the Registrar General Office not surveys**
+
+* Snow wasn't responsible directly, but it contributed to the knowledge 
+
+* Snow also didn't event this mapping style
+
+* Snow didn't make the map, drawing was done by **Charles Cheffins** and probably others
+
+* Valentine Seamen (1770-1817) did **before Snow was even born!**
+
+]
+
+.pull-right[
+
+&lt;img src="img/valentineseaman.jpg" width="100%" /&gt;
+
+.small[Valentine Seamen ca 1800. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+]
+
+---
+
+class: inverse, center, middle
+
+## Valentine Seamen wondering if his work would be covered would be covered in a GIS class 220 years later...
+
+---
+
+# The problem...
+
+.pull-left[
+
+
+### Benjamin Rush
+
+* We have Black Plague / Yellow Fever in Philadelphia (1793) 
+
+* Benjamin Rush (Founding father of USA) said it must be from foreign goods
+
+* Believed it was contagious like COVID! 
+
+
+]
+
+.pull-right[
+
+&lt;img src="img/YellowFeverHaulingDeadThumb.jpg" width="100%" /&gt;
+
+.small[Philadelphia Under Siege: The Yellow Fever of 1793. Source:[ Samuel A. Gum](http://pabook2.libraries.psu.edu/palitmap/YellowFever.html)
+]
+]
+
+---
+
+# The problem...
+
+.pull-left[
+
+
+### New York Doctors
+
+* Ships were the cause!
+
+* But it wasn't passing from person to person
+  * Those who cared for these people didn't get it!
+
+* The ships must be the cause but the people on them have developed less contagious version!
+
+* There was another source that was from the decaying material in the ships and dock area
+
+* Once someone was dying this also spread the disease 
+]
+
+.pull-right[
+
+&lt;img src="img/ships.png" width="100%" /&gt;
+
+.small[Arch Street Wharf in Philadelphia, where some of the first cases were identified. Source:[ History Channel](https://www.history.com/news/yellow-fever-outbreak-philadelphia)
+]
+]
+
+---
+
+class: inverse, center, middle
+
+## Rush then claimed in was from a bad batch of coffee! 
+
+--
+
+## Ok Rush?....
+
+---
+
+# The problem...
+
+It is liked to ships, people, hot temperature, putrid air + water and cities!
+
+**Valentine Seamen** 
+
+* Made a map 1794/95!!!
+
+* Used idea of meteorological maps
+
+
+&lt;img src="img/seamen_original.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+.small[Second original map by Seamen. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+---
+# What this map means...1
+
+&lt;img src="img/seamen_1.png" width="100%" /&gt;
+.small[Fatal cases are noted in red, non fatal cases in slate grey.  “S” stands for site of contagion or effluvium (or other miasma source). Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+
+]
+
+---
+
+# What this map means...2
+
+
+&lt;img src="img/seamen_2.png" width="100%" /&gt;
+
+.small[Fatal cases are noted in red, non fatal cases in slate grey.  “S” stands for site of contagion or effluvium (or other miasma source). Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+---
+
+# Interpretation
+
+.pull-left[
+
+* We can see why the belief was that it was coming from ships
+
+* There were marked **waves**
+
+* 9th September then no cases until 20th September
+
+* Believed to be due to
+  * the time needed for decay from filth 
+  * ships docking
+  * tidal patterns
+  * slips fill and empty - when empty it would exposure the disease 
+]
+
+.pull-right[
+
+&lt;img src="img/seamen_3.png" width="100%" /&gt;
+
+.small[Four Temporal Regions (Isopleths) with Isoline Boundaries, defined by clustering and “natural breaks”. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+
+]
+---
+class: inverse, center, middle
+
+
+## Everyone was wrong as it was the Mosquito
+
+--
+
+## This was discounted as they thought it could be flies / other pests
+
+## Temporal nature due to breeding habbits that are related to rainfall
+
+
+---
+class: inverse, center, middle
+
+## Correlation is not causation...
+
+---
+
+# Snow's Map (?!)
+
+* The difference here is how Snow represented the deaths - with lines
+
+* But did Snow even come up with this ?
+
+* Did Cheffins make the map ?
+
+&lt;img src="img/cholera.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+---
+
+# Map before Snow's
+
+&lt;img src="img/Coopermap.jpg" width="85%" style="display: block; margin: auto;" /&gt;
+
+.small[Deaths from cholera in Soho, London 1854 by Edmund Cooper). Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+
+---
+
+# Snow's other contribution...
+
+.pull-left[
+
+* Snow made two maps
+
+* Most common one is 1854
+
+* BUT the one in 1855 has the broad street pump in the right location
+
+* AND also induces an isochrone - houses accessing the pump 
+
+* Is this the first kind of location analysis (in GIS location-allocation or accessibility)
+
+* It might be the first instance of a **Voronoi Diagram**
+]
+
+.pull-right[
+
+&lt;img src="img/Snowmap2.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+]
+  
+---
+
+# Voronoi Diagram
+
+* Voronoi (or Dirichlet tesselation or Thiessen polygons)
+
+* Polygon showing the boundary of the closest point in space...
+
+
+.pull-left[
+
+&lt;img src="img/voroni.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.small[Voronoi diagram. Source:[Francesco Bellelli](https://towardsdatascience.com/the-fascinating-world-of-voronoi-diagrams-da8fc700fa1b)
+]
+
+]
+
+.pull-right[
+
+&lt;img src="img/voroni_nature.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+.small[Voronoi in nature Source:[Francesco Bellelli](https://towardsdatascience.com/the-fascinating-world-of-voronoi-diagrams-da8fc700fa1b)
+]
+
+]
+
+---
+
+# Who is responsbile?
+
+
+* Valentine Seamen = 1794/95
+
+* Edmund Cooper = 1854 
+
+* John Snow / team / cartographers = 1854
+
+.pull-left[
+
+**Team Seamen**
+
+&lt;img src="img/valentineseaman.jpg" width="50%" style="display: block; margin: auto;" /&gt;
+
+.small[Valentine Seamen ca 1800. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+]
+
+.pull-right[
+
+**Team Snow**
+
+
+&lt;img src="img/John_Snow.jpg" width="55%" style="display: block; margin: auto;" /&gt;
+
+.small[John Snow 1813-1858. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+]
+]
+
+---
+
+# The outcome to Snow's work
+
+.pull-left[
+
+* He convinced local authority to remove the handle of the broad street pump
+
+* By that stage it was too late
+
+* They found a **leaking sewer** that was going into the well!!
+
+* **Go and visit the broad street pump in London**
+]
+
+.pull-right[
+
+&lt;img src="img/Pump_Handle_-_John_Snow_.jpg" width="80%" style="display: block; margin: auto;" /&gt;
+
+.small[1854 Broad Street cholera outbreak. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+
+]
+
+]
+
 ---
 
 # What patterns show
@@ -288,22 +611,6 @@ Second version of the map in 1855 had distance to pump - first voroni diagram
 * Does the incinerator have any influence ?
 ---
 
-# Spatial Epidemiology: Mortality
-
-* Similar values might suggest there is something more going on
-* Some sort of spatial influence
-* Note the difference between spatially continuous and point data
-
-&lt;img src="img/Lorant.png" width="60%" style="display: block; margin: auto;" /&gt;
-
-.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&amp;originRegion=eu-west-1&amp;originCreation=20220221114112)
-]
-
-???
-
-Mortality and deprivation - clear mortality areas - what else is happening here?
-
----
 
 # Quantifying Spatial Patterns
 
@@ -362,106 +669,6 @@ Space fixed - the spatial units fixed - boundary but properties (values) vary.
 ]
 
 ---
-# From points to spatially continuous observations 1
-
-* We can convert almost any point data into spatially continuous observations
-
-### Questions
-* Why should we never (or almost never) use count data (e.g. number of blue plaques per ward) for spatial autocorrelation measures?
-
-* In what instance might we be able to use count data?
-
-* Discuss in groups for 1 min 30 seconds?
-
-<div class="countdown" id="timer_621e15af" style="bottom:0;left:65%;" data-warnwhen="10">
-<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
-</div>
-
----
-# From points to spatially continuous observations 2
-
-### Answers
-
-* Summing the counts generates results that are dependent on the size of the spatial unit ...e.g...
-
-&lt;img src="img/grid_vs_tess_counts.svg" width="60%" style="display: block; margin: auto;" /&gt;
-
-.small[Count of individuals in each zonal unit. Note how an underlying point distribution can generate vastly different looking choropleth maps given different aggregation schemes. Source:[Intro to GIS and Spatial Analysis Manuel Gimond, 2022](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html)]
-
----
-# From points to spatially continuous observations 3
-
-* In this case we could sum our counts and normalise then based on some sort of underling data - such as population. e.g...lung cancer rates or mortality rates 
-
-Our code would look similar to this ...
-
-
-```r
-points_sf_joined &lt;- LondonWardsMerged%&gt;%
-  st_join(BluePlaquesSub)%&gt;%
-  add_count(ward_name)%&gt;%
-  janitor::clean_names()%&gt;%
-  #calculate area
-  mutate(area=st_area(.))%&gt;%
-  #then density of the points per ward
-  mutate(density=n/area)%&gt;%
-  #select density and some other variables 
-  dplyr::select(density, ward_name, gss_code, n, average_gcse_capped_point_scores_2014)
-```
-
-* Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
-
----
-
-# Small pause for code questions
-
-I've assumed the following:
-
-* You have some familiarity with:
-  * [R](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html) 
-  * [Tidyverse](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#reading-data-into-r)
-  * [Spatial features (sf)](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#background-to-spatial-data-in-r)
-  * [Coordinate reference systems (e.g. geographic and projected)](https://andrewmaclachlan.github.io/CASA0005repo/spatial-descriptive-statistics.html#part-1-projections)
-
-Usually i'd gauge this now and adjust what we talk about...but Laura can pause here and address any questions...
-
-The lecture is primarily for the theory and the practical will go over the code. 
----
-# From points to spatially continuous observations 4
-
-### Answers
-
-* An instance where it is ok to use counts is where the mapping units are spatially consistent --e.g. hexagons or Uber's H3 grid
-* The variable spatial unit is removed
-
-&lt;img src="img/hexagons.jpg" width="60%" style="display: block; margin: auto;" /&gt;
-
-.small[Source:[Thematic Mapping with Hexagons, ESRI 2015](https://www.esri.com/about/newsroom/insider/thematic-mapping-with-hexagons/)
-]
-
----
-# Take care! 
-
-### Modifiable Areal Unit Problem
-
-* Different aggregations will lead to:
-
-  * Different outcomes
-  
-  * Uncomparable results 
-  
-&lt;img src="img/MAUP-Scale-Effect-1265x632.png" width="60%" style="display: block; margin: auto;" /&gt;
-
-.small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
-]  
----
-# Take care 2! 
-
-If you have aggregated point data they can no longer be described as points...as [Gimond 2022 says](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html#ecological-fallacy)
-
-&gt; "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
-
----
 
 class: inverse, center, middle
 # Now how do we calculate clustering and spatial autocorrelation...
@@ -507,17 +714,61 @@ If there is a difference then there is something going on...
 Get the normal distribution every time - weight machine at a gym 
 
 
+---
+
+# Observed vs Expected
+
+&lt;img src="img/weights_normal.jpg" width="45%" style="display: block; margin: auto;" /&gt;
+
+.small[Source:[reddit](https://www.reddit.com/r/mildlyinteresting/comments/ut67my/the_weight_machine_at_my_gym_shows_a_normal/)
+]  
+
 
 ---
 
 class: inverse, center, middle
 
-# look familiar? 
+# look familiar? - the wall BBC show
 
 &lt;img src="img/thewall.jpg" width="100%" style="display: block; margin: auto;" /&gt;
 
 .small[Source:[BBC](https://www.bbc.co.uk/programmes/p07bvx36)
 ]  
+
+---
+# Eugencis at UCL
+
+* Eugenics "the scientifically erroneous and immoral theory of “racial improvement” and “planned breeding”
+
+* Until recently UCL had named buildings and lecture halls after these people...
+
+.pull-left[
+**Karl Perason**
+
+* Developed at UCL
+
+* University's first Chair of Eugenics that was established on the request of Galton
+
+* Pearson’s product-moment coefficient BUT just use **product-moment coefficient**
+  * Range from -1 to 1 to show relationship between two variables....
+
+]
+
+.pull-right[
+
+**Francis Galton**
+
+* Coined the word eugenics in 1883
+
+* Wanted it to become a religion 
+
+* Key figure in stats but most of these were to further eugenic ideas...
+
+.small[Source:[Natalie Ball](https://eugenicsarchive.ca/discover/tree/518c1ed54d7d6e0000000002)
+]  
+
+]
+
 
 ---
 
@@ -708,6 +959,8 @@ where:
 
 .pull-right[
  `$$\frac{\lambda^{k}e^{-\lambda}}{k!}$$`
+
+* In excel = `(($D$2^A2)*EXP(-$D$2)/FACT(A2))`
 * Expected = Expected frequency count on the Poisson distribution (freq count * probability)
 * Observed probability = Frequency count / sum of the frequency count
 ]
@@ -878,9 +1131,9 @@ db &lt;- BluePlaquesSubPoints %&gt;%
 
 How to select values
 
-* Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value 
+* Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value from a few slides ago...around 700 meters
 
-* Or plot the average  distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
+* Or plot the average distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
 
 
 ```r
@@ -888,11 +1141,91 @@ BluePlaquesSubPoints%&gt;%
   dbscan::kNNdistplot(.,k=4)
 ```
 
+
+---
+# DBSCAN
+
+...this gives...
+
+
+&lt;img src="img/knee" width="50%" style="display: block; margin: auto;" /&gt;
+
+* plotted: average distance to the k neighbours, which are then plotted in ascending order
+  * The knee is where this value (of distance to neighbours) increases and the value we use
+
 * Min points: start with what you think is appropriate 
 
 * OPTICS - extends DBSCAN and uses an algorithm to find optimum distance thresholds for clustering. 
 
 ---
+
+# HDBSCAN - not in practical
+
+* Hierarchical Density-based Spatial Clustering of Applications with Noise
+
+K-means can performs best with:
+
+* round data, equally sized, equally dense, no noise.
+
+**HDBSCAN**
+
+* cluster hierarchy, looks for regions of dense data (not shape / eps / distance can vary)
+* e.g. islands from the sea ...
+
+.pull-left[
+
+&lt;img src="img/HDBSCAN_1.png" width="100%" style="display: block; margin: auto;" /&gt;
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+
+]
+
+
+.pull-right[
+&lt;img src="img/HDBSCAN_2.png" width="100%" style="display: block; margin: auto;" /&gt;
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+
+]
+---
+# HDBSCAN...best...
+
+.pull-left[
+
+* Arbitrary shapes - not all circular 
+
+* Clusters of different sizes - not constrained by 1 argument (e.g. distance or K neighbours)
+
+* Clusters with different densities 
+
+* Noise / outliers 
+]
+
+.pull-right[
+
+&lt;img src="img/HDBSCAN_3.png" width="100%" style="display: block; margin: auto;" /&gt;
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+]
+
+---
+# HDBSCAN...differences...
+
+* From the same authors that created DBSCAN
+
+* it is the same but...**there is no epsilon (distance requirement)** and it can **VARY**
+
+.pull-left[
+&lt;img src="img/dbscan_clusters.png" width="100%" style="display: block; margin: auto;" /&gt;
+.small[Source:[Comparing Python Clustering Algorithms](https://hdbscan.readthedocs.io/en/latest/comparing_clustering_algorithms.html)]
+]
+
+
+
+.pull-right[
+&lt;img src="img/hdbscan_clusters.png" width="100%" style="display: block; margin: auto;" /&gt;
+.small[Source:[Comparing Python Clustering Algorithms](https://hdbscan.readthedocs.io/en/latest/comparing_clustering_algorithms.html)]
+]
+
+---
+
 class: inverse, center, middle
 
 # The core question..
@@ -909,9 +1242,144 @@ class: inverse, center, middle
 &gt;you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!
 
 ---
+
+class: inverse, center, middle
+
+# Part 2: Spatial autocorrelation
+
+---
+
+# Questions we can ask / set
+
+**Points**
+
+Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
+
+**Spatially continuous observations (e.g. values of polygons)**
+
+How (dis)similar are our values assigned to geographic units across geographic space
+
+---
 class: inverse, center, middle
 
 # Just because we have clustering doesn't mean there will be patterns of spatially referenced continuous observations 
+
+---
+
+# Example - Spatial Epidemiology: Mortality
+
+# Spatial Epidemiology: Mortality
+
+* Similar values might suggest there is something more going on
+* Some sort of spatial influence
+* Note the difference between spatially continuous and point data
+
+&lt;img src="img/Lorant.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&amp;originRegion=eu-west-1&amp;originCreation=20220221114112)
+]
+
+???
+
+Mortality and deprivation - clear mortality areas - what else is happening here?
+
+---
+# Example - GCSE scores 
+
+* Average GCSE point score 2014 per London ward
+* Question: Are the values similar between certain wards?
+
+&lt;img src="img/average_GCSE.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#)
+]
+
+
+---
+
+# From points to spatially continuous observations 1
+
+* We can convert almost any point data into spatially continuous observations
+
+### Questions
+* Why should we never (or almost never) use count data (e.g. number of blue plaques per ward) for spatial autocorrelation measures?
+
+* In what instance might we be able to use count data?
+
+* Discuss in groups for 1 min 30 seconds?
+
+<div class="countdown" id="timer_637272be" style="bottom:0;left:65%;" data-warnwhen="10">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+---
+# From points to spatially continuous observations 2
+
+### Answers
+
+* Summing the counts generates results that are dependent on the size of the spatial unit ...e.g...
+
+&lt;img src="img/grid_vs_tess_counts.svg" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[Count of individuals in each zonal unit. Note how an underlying point distribution can generate vastly different looking choropleth maps given different aggregation schemes. Source:[Intro to GIS and Spatial Analysis Manuel Gimond, 2022](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html)]
+
+---
+# From points to spatially continuous observations 3
+
+* In this case we could sum our counts and normalise then based on some sort of underling data - such as population. e.g...lung cancer rates or mortality rates 
+
+Our code would look similar to this ...
+
+
+```r
+points_sf_joined &lt;- LondonWardsMerged%&gt;%
+  st_join(BluePlaquesSub)%&gt;%
+  add_count(ward_name)%&gt;%
+  janitor::clean_names()%&gt;%
+  #calculate area
+  mutate(area=st_area(.))%&gt;%
+  #then density of the points per ward
+  mutate(density=n/area)%&gt;%
+  #select density and some other variables 
+  dplyr::select(density, ward_name, gss_code, n, average_gcse_capped_point_scores_2014)
+```
+
+* Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
+
+---
+# From points to spatially continuous observations 4
+
+### Answers
+
+* An instance where it is ok to use counts is where the mapping units are spatially consistent --e.g. hexagons or Uber's H3 grid
+* The variable spatial unit is removed
+
+&lt;img src="img/hexagons.jpg" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[Source:[Thematic Mapping with Hexagons, ESRI 2015](https://www.esri.com/about/newsroom/insider/thematic-mapping-with-hexagons/)
+]
+
+---
+# Take care! 
+
+### Modifiable Areal Unit Problem
+
+* Different aggregations will lead to:
+
+  * Different outcomes
+  
+  * Uncomparable results 
+  
+&lt;img src="img/MAUP-Scale-Effect-1265x632.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+.small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
+]  
+---
+# Take care 2! 
+
+If you have aggregated point data they can no longer be described as points...as [Gimond 2022 says](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html#ecological-fallacy)
+
+&gt; "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
 
 ---
 # Spatially continous observations 
@@ -1214,8 +1682,6 @@ class: inverse, center, middle
 
 ### Local Moran's I shows....?
 
-### Practical: https://rpubs.com/AndrewMacLachlan/870348
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1263,6 +1729,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

@@ -48,7 +48,12 @@ xaringanExtra::use_extra_styles(
 )
 ```
 
-class: inverse, center, title-slide, middle
+class: center, title-slide, middle
+
+background-image: url("img/CASA_Logo_no_text_trans_17.png")
+background-size: cover
+background-position: center
+
 
 <style>
 .title-slide .remark-slide-number {
@@ -60,79 +65,36 @@ class: inverse, center, title-slide, middle
 library(fontawesome)
 ```
 
-# Spatial analysis of public health data
-
-### Point Pattern Analysis
+# Point Pattern / Spatial Autocorrelation Analysis
 
 ### 21/02/2022 (updated: `r format(Sys.time(), "%d/%m/%Y")`)
-`r fa("link", fill = "white")`https://andrewmaclachlan.github.io/Spatial-analysis-of-public-health-data/#1
-.pull-left[### Andy MacLachlan
-`r fa("paper-plane", fill = "white")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
-`r fa("twitter", fill = "white")`[andymaclachlan](https://twitter.com/andymaclachlan)
-`r fa("github", fill = "white")`[andrewmaclachlan](https://github.com/andrewmaclachlan)]
-
-.pull-right[### Laura Sheppard
-`r fa("paper-plane", fill = "white")`[laura.sheppard.20@ucl.ac.uk](mailto:laura.sheppard.20@ucl.ac.uk)
-`r fa("twitter", fill = "white")`[laurahsheppard](https://twitter.com/laurahsheppard)
-`r fa("github", fill = "white")`[LauraSheppard](https://github.com/LauraSheppard)]
-
-
-`r fa("map-marker", fill = "white")`[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
-
-Slide acknowledgement: [Professor Adam Dennett](https://twitter.com/adam_dennett)
+`r fa("paper-plane", fill = "#562457")`[a.maclachlan@ucl.ac.uk](mailto:a.maclachlan@ucl.ac.uk)
+`r fa("twitter", fill = "#562457")`[andymaclachlan](https://twitter.com/andymaclachlan)
+`r fa("github", fill = "#562457")`[andrewmaclachlan](https://github.com/andrewmaclachlan)
+`r fa("location-dot", fill = "#562457")`[Centre for Advanced Spatial Analysis, UCL](https://www.ucl.ac.uk/bartlett/casa/)
 
 <a href="https://github.com/andrewmaclachlan" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-
 ---
 ```{r xaringan-logo, echo=FALSE}
 xaringanExtra::use_logo(
-  image_url = "img/casa_logo.jpg"
+  image_url = "img/casa_logo.jpg",
+  width = "50px",
+  position = xaringanExtra::css_position(top = "1em", right = "2em")
+
 )
 ```
 
-# About me
-
-* Undergraduate in human geography, University of Sheffield + year abroad at the University of Wollongong
-
-* MSc in Remote Sensing and GIS, University of Southampton 
-
-* PhD in Geography and Environmental Science, University of Southampton / University of Western Australia "Earth Observation for Quantifying Urban Growth and its Application to Sustainable City Development"
-
-* Teaching Fellow and now lecturer in The Barlett Centre for Advanced Spatial Analysis + lead our MSc in Smart Cities and Urban Analytics becoming Urban Spatial Science
-
-* [Research:](https://scholar.google.com/citations?user=wLrJwyQAAAAJ&hl=en)
-  * Geospatial tools / data for sustainable planning and environmental decision making 
-  
-* Teaching:
-  * [Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/)
-  * [Remotely Sensing Cities and Environments](https://andrewmaclachlan.github.io/CASA0023/)  
----
-
-# About Laura
-
-* Undergraduate degree in Geography with Quantitative Research Methods, University of Bristol
-* Master’s degree in Advanced Quantitative Methods, University of Bristol
-* PhD degree (started in September 2020) in Advanced Spatial Analysis at CASA, UCL
-
-Research:
-* PhD is on Gendering the Research Pipeline and Diversifying Doctoral Education – includes gender and higher educational inequalities using data science and machine learning (validation, ensemble models, gender inferencing algorithms, text & pdf analysis, multilevel modelling, mapping, visualisations etc.)
-
-Teaching:
-* Taught on Geographic Information Systems and Science module in CASA for the last two years 
-* Associate Fellow of Higher Education Academy
-
-
----
-
 # How to use the lectures
 
-- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1) `r emo::ji("speak")` shar-in-gen or [ʃæ.ˈriŋ.gæn]
+- Slides are made with [xaringan](https://slides.yihui.org/xaringan/#1)
 
-- `r fa("search")` In the bottom left there is a search tool which will search all content of presentation (Control + F will also search)
+- `r fa("magnifying-glass")` In the bottom left there is a search tool which will search all content of presentation
+
+- Control + F will also search 
 
 - Press enter to move to the next result 
 
-- `r fa("pencil-alt")` In the top right let's you draw on the slides, although these aren't saved.
+- `r fa("pencil")` In the top right let's you draw on the slides, although these aren't saved.
 
 - Pressing the letter `o` (for overview) will allow you to see an overview of the whole presentation and go to a slide
 
@@ -140,7 +102,6 @@ Teaching:
 
 - Pressing alt+F will fit the slide to the screen, this is useful if you have resized the window and have another open - side by side. 
 
-- Pressing h will show the help 
 
 ---
 
@@ -152,12 +113,13 @@ class: inverse, center, middle
 # Outline
 
 .pull-left[
-* The importance of pattern
+* The importance of patterns
 
 * Patterns of categorical point data – Point Pattern Analysis
   * Quadrat Analysis
   * Ripley’s K
   * DBSCAN
+  * HDBSCAN
 
 * Patterns of spatially referenced continuous observations
   * Spatial autocorrelation
@@ -188,14 +150,23 @@ Two halves:
 * Spatially referenced observations - where regions of a map are similar = clustering of values = spatial autocorrelation. 
 
 * Methods to detect if these patterns are there or not - it might just be use seeing them
+
 ---
+
+class: inverse, center, middle
+
+# Part 1: Point Pattern Analysis
+
+
+---
+
 # Questions we can ask / set
 
-## Points
+**Points**
 
 Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
 
-## Spatially continuous observations (e.g. values of polygons)
+**Spatially continuous observations (e.g. values of polygons)**
 
 How (dis)similar are our values assigned to geographic units across geographic space
 
@@ -216,13 +187,14 @@ knitr::include_graphics('img/Jon_Snow_Season.png')
 
 --
 
+
 .pull-right[
 
 ```{r echo=FALSE, out.width='60%', fig.align='center'}
 knitr::include_graphics('img/John_Snow.jpg')
 ```
 
-.small[John Snow. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+.small[John Snow 1813-1858. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
 ]
 ]
 
@@ -231,8 +203,396 @@ knitr::include_graphics('img/John_Snow.jpg')
 John snow often attributed with identifying the outbreak at the broad street pump
 Data was from mortality reports issued by the Registrar General Office not surveys
 Snow wasn't responsible directly, but it contributed to the knowledge 
-Snow also didn't event this mapping style - 1798 New York outbreak of Yellow fever - Valentine Seaman 
-Second version of the map in 1855 had distance to pump - first voroni diagram 
+Snow also didn't event this mapping style - 1795 New York outbreak of Yellow fever - Valentine Seaman 
+---
+# Background
+
+.pull-left[
+
+* In response to the Cholera outbreak in 1854 
+
+* This was the third outbreak the city had seen....
+
+* John Snow saw a pattern from those dying of the disease ...
+
+* a **spatial pattern**
+
+* He was a doctor and pioneered the use of anesthesia 
+]
+
+.pull-right[
+
+Cartoon (dated 1852) showing that cholera was from social overcrowding associated with the industrial revolution as opposed to polluted water...
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/king-cholera-wellcome.jpg')
+```
+
+.small[A court for king cholera. Source:[Science museum](https://www.sciencemuseum.org.uk/objects-and-stories/medicine/cholera-victorian-london)
+]
+
+]
+
+---
+# Famous map! 
+
+
+```{r echo=FALSE, out.width='55%', fig.align='center'}
+knitr::include_graphics('img/cholera.png')
+```
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+---
+
+
+# History of point pattern
+
+
+.pull-left[
+
+* John snow often attributed with identifying the outbreak at the broad street pump
+
+* Data was from mortality reports **issued by the Registrar General Office not surveys**
+
+* Snow wasn't responsible directly, but it contributed to the knowledge 
+
+* Snow also didn't event this mapping style
+
+* Snow didn't make the map, drawing was done by **Charles Cheffins** and probably others
+
+* Valentine Seamen (1770-1817) did **before Snow was even born!**
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/valentineseaman.jpg')
+```
+
+.small[Valentine Seamen ca 1800. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+]
+
+---
+
+class: inverse, center, middle
+
+## Valentine Seamen wondering if his work would be covered would be covered in a GIS class 220 years later...
+
+---
+
+# The problem...
+
+.pull-left[
+
+
+### Benjamin Rush
+
+* We have Black Plague / Yellow Fever in Philadelphia (1793) 
+
+* Benjamin Rush (Founding father of USA) said it must be from foreign goods
+
+* Believed it was contagious like COVID! 
+
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/YellowFeverHaulingDeadThumb.jpg')
+```
+
+.small[Philadelphia Under Siege: The Yellow Fever of 1793. Source:[ Samuel A. Gum](http://pabook2.libraries.psu.edu/palitmap/YellowFever.html)
+]
+]
+
+---
+
+# The problem...
+
+.pull-left[
+
+
+### New York Doctors
+
+* Ships were the cause!
+
+* But it wasn't passing from person to person
+  * Those who cared for these people didn't get it!
+
+* The ships must be the cause but the people on them have developed less contagious version!
+
+* There was another source that was from the decaying material in the ships and dock area
+
+* Once someone was dying this also spread the disease 
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/ships.png')
+```
+
+.small[Arch Street Wharf in Philadelphia, where some of the first cases were identified. Source:[ History Channel](https://www.history.com/news/yellow-fever-outbreak-philadelphia)
+]
+]
+
+---
+
+class: inverse, center, middle
+
+## Rush then claimed in was from a bad batch of coffee! 
+
+--
+
+## Ok Rush?....
+
+---
+
+# The problem...
+
+It is liked to ships, people, hot temperature, putrid air + water and cities!
+
+**Valentine Seamen** 
+
+* Made a map 1794/95!!!
+
+* Used idea of meteorological maps
+
+
+```{r echo=FALSE, out.width='65%', fig.align='center'}
+knitr::include_graphics('img/seamen_original.png')
+```
+
+.small[Second original map by Seamen. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+---
+# What this map means...1
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/seamen_1.png')
+```
+.small[Fatal cases are noted in red, non fatal cases in slate grey.  “S” stands for site of contagion or effluvium (or other miasma source). Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+
+]
+
+---
+
+# What this map means...2
+
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/seamen_2.png')
+```
+
+.small[Fatal cases are noted in red, non fatal cases in slate grey.  “S” stands for site of contagion or effluvium (or other miasma source). Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+---
+
+# Interpretation
+
+.pull-left[
+
+* We can see why the belief was that it was coming from ships
+
+* There were marked **waves**
+
+* 9th September then no cases until 20th September
+
+* Believed to be due to
+  * the time needed for decay from filth 
+  * ships docking
+  * tidal patterns
+  * slips fill and empty - when empty it would exposure the disease 
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/seamen_3.png')
+```
+
+.small[Four Temporal Regions (Isopleths) with Isoline Boundaries, defined by clustering and “natural breaks”. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+
+
+]
+---
+class: inverse, center, middle
+
+
+## Everyone was wrong as it was the Mosquito
+
+--
+
+## This was discounted as they thought it could be flies / other pests
+
+## Temporal nature due to breeding habbits that are related to rainfall
+
+
+---
+class: inverse, center, middle
+
+## Correlation is not causation...
+
+---
+
+# Snow's Map (?!)
+
+* The difference here is how Snow represented the deaths - with lines
+
+* But did Snow even come up with this ?
+
+* Did Cheffins make the map ?
+
+```{r echo=FALSE, out.width='55%', fig.align='center'}
+knitr::include_graphics('img/cholera.png')
+```
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+---
+
+# Map before Snow's
+
+```{r echo=FALSE, out.width='85%', fig.align='center'}
+knitr::include_graphics('img/Coopermap.jpg')
+```
+
+.small[Deaths from cholera in Soho, London 1854 by Edmund Cooper). Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+
+---
+
+# Snow's other contribution...
+
+.pull-left[
+
+* Snow made two maps
+
+* Most common one is 1854
+
+* BUT the one in 1855 has the broad street pump in the right location
+
+* AND also induces an isochrone - houses accessing the pump 
+
+* Is this the first kind of location analysis (in GIS location-allocation or accessibility)
+
+* It might be the first instance of a **Voronoi Diagram**
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/Snowmap2.jpg')
+```
+
+.small[Something in the water: the mythology of Snow’s map of cholera. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+]
+
+]
+  
+---
+
+# Voronoi Diagram
+
+* Voronoi (or Dirichlet tesselation or Thiessen polygons)
+
+* Polygon showing the boundary of the closest point in space...
+
+
+.pull-left[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/voroni.png')
+```
+
+.small[Voronoi diagram. Source:[Francesco Bellelli](https://towardsdatascience.com/the-fascinating-world-of-voronoi-diagrams-da8fc700fa1b)
+]
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='85%', fig.align='center'}
+  knitr::include_graphics('img/voroni_nature.png')
+```
+
+.small[Voronoi in nature Source:[Francesco Bellelli](https://towardsdatascience.com/the-fascinating-world-of-voronoi-diagrams-da8fc700fa1b)
+]
+
+]
+
+---
+
+# Who is responsbile?
+
+
+* Valentine Seamen = 1794/95
+
+* Edmund Cooper = 1854 
+
+* John Snow / team / cartographers = 1854
+
+.pull-left[
+
+**Team Seamen**
+
+```{r echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics('img/valentineseaman.jpg')
+```
+
+.small[Valentine Seamen ca 1800. Source:[Brian Altonen](https://brianaltonenmph.com/gis/historical-disease-maps/valentine-seaman-1804-the-black-plague-or-yellow-fever-in-new-york-city/)
+]
+]
+
+.pull-right[
+
+**Team Snow**
+
+
+```{r echo=FALSE, out.width='55%', fig.align='center'}
+knitr::include_graphics('img/John_Snow.jpg')
+```
+
+.small[John Snow 1813-1858. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+]
+]
+
+---
+
+# The outcome to Snow's work
+
+.pull-left[
+
+* He convinced local authority to remove the handle of the broad street pump
+
+* By that stage it was too late
+
+* They found a **leaking sewer** that was going into the well!!
+
+* **Go and visit the broad street pump in London**
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics('img/Pump_Handle_-_John_Snow_.jpg')
+```
+
+.small[1854 Broad Street cholera outbreak. Source:[Wikipedia](https://en.wikipedia.org/wiki/John_Snow)
+
+]
+
+]
+
 ---
 
 # What patterns show
@@ -263,24 +623,6 @@ knitr::include_graphics('img/Gatrell.png')
 * Does the incinerator have any influence ?
 ---
 
-# Spatial Epidemiology: Mortality
-
-* Similar values might suggest there is something more going on
-* Some sort of spatial influence
-* Note the difference between spatially continuous and point data
-
-```{r echo=FALSE, out.width='60%', fig.align='center'}
-knitr::include_graphics('img/Lorant.png')
-```
-
-.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&originRegion=eu-west-1&originCreation=20220221114112)
-]
-
-???
-
-Mortality and deprivation - clear mortality areas - what else is happening here?
-
----
 
 # Quantifying Spatial Patterns
 
@@ -343,109 +685,6 @@ knitr::include_graphics('img/average_GCSE.png')
 ]
 
 ---
-# From points to spatially continuous observations 1
-
-* We can convert almost any point data into spatially continuous observations
-
-### Questions
-* Why should we never (or almost never) use count data (e.g. number of blue plaques per ward) for spatial autocorrelation measures?
-
-* In what instance might we be able to use count data?
-
-* Discuss in groups for 1 min 30 seconds?
-
-`r countdown(minutes=1, seconds =30, warn_when = 10, bottom=0, left="65%")`
-
----
-# From points to spatially continuous observations 2
-
-### Answers
-
-* Summing the counts generates results that are dependent on the size of the spatial unit ...e.g...
-
-```{r echo=FALSE, out.width='60%', fig.align='center'}
-knitr::include_graphics('img/grid_vs_tess_counts.svg')
-```
-
-.small[Count of individuals in each zonal unit. Note how an underlying point distribution can generate vastly different looking choropleth maps given different aggregation schemes. Source:[Intro to GIS and Spatial Analysis Manuel Gimond, 2022](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html)]
-
----
-# From points to spatially continuous observations 3
-
-* In this case we could sum our counts and normalise then based on some sort of underling data - such as population. e.g...lung cancer rates or mortality rates 
-
-Our code would look similar to this ...
-
-```{r, eval=FALSE}
-points_sf_joined <- LondonWardsMerged%>%
-  st_join(BluePlaquesSub)%>%
-  add_count(ward_name)%>%
-  janitor::clean_names()%>%
-  #calculate area
-  mutate(area=st_area(.))%>%
-  #then density of the points per ward
-  mutate(density=n/area)%>%
-  #select density and some other variables 
-  dplyr::select(density, ward_name, gss_code, n, average_gcse_capped_point_scores_2014)
-```
-
-* Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
-
----
-
-# Small pause for code questions
-
-I've assumed the following:
-
-* You have some familiarity with:
-  * [R](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html) 
-  * [Tidyverse](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#reading-data-into-r)
-  * [Spatial features (sf)](https://andrewmaclachlan.github.io/CASA0005repo/introduction-to-r.html#background-to-spatial-data-in-r)
-  * [Coordinate reference systems (e.g. geographic and projected)](https://andrewmaclachlan.github.io/CASA0005repo/spatial-descriptive-statistics.html#part-1-projections)
-
-Usually i'd gauge this now and adjust what we talk about...but Laura can pause here and address any questions...
-
-The lecture is primarily for the theory and the practical will go over the code. 
----
-# From points to spatially continuous observations 4
-
-### Answers
-
-* An instance where it is ok to use counts is where the mapping units are spatially consistent --e.g. hexagons or Uber's H3 grid
-* The variable spatial unit is removed
-
-```{r echo=FALSE, out.width='60%', fig.align='center'}
-knitr::include_graphics('img/hexagons.jpg')
-```
-
-.small[Source:[Thematic Mapping with Hexagons, ESRI 2015](https://www.esri.com/about/newsroom/insider/thematic-mapping-with-hexagons/)
-]
-
----
-# Take care! 
-
-### Modifiable Areal Unit Problem
-
-* Different aggregations will lead to:
-
-  * Different outcomes
-  
-  * Uncomparable results 
-  
-```{r echo=FALSE, out.width='60%', fig.align='center'}
-knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.png')
-```
-
-.small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
-]  
----
-# Take care 2! 
-
-If you have aggregated point data they can no longer be described as points...as [Gimond 2022 says](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html#ecological-fallacy)
-
-> "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
-
----
 
 class: inverse, center, middle
 # Now how do we calculate clustering and spatial autocorrelation...
@@ -493,12 +732,23 @@ If there is a difference then there is something going on...
 Get the normal distribution every time - weight machine at a gym 
 
 
+---
+
+# Observed vs Expected
+
+```{r echo=FALSE, out.width='45%', fig.align='center'}
+knitr::include_graphics('img/weights_normal.jpg')
+```
+
+.small[Source:[reddit](https://www.reddit.com/r/mildlyinteresting/comments/ut67my/the_weight_machine_at_my_gym_shows_a_normal/)
+]  
+
 
 ---
 
 class: inverse, center, middle
 
-# look familiar? 
+# look familiar? - the wall BBC show
 
 ```{r echo=FALSE, out.width='100%', fig.align='center'}
 knitr::include_graphics('img/thewall.jpg')
@@ -506,6 +756,41 @@ knitr::include_graphics('img/thewall.jpg')
 
 .small[Source:[BBC](https://www.bbc.co.uk/programmes/p07bvx36)
 ]  
+
+---
+# Eugencis at UCL
+
+* Eugenics "the scientifically erroneous and immoral theory of “racial improvement” and “planned breeding”
+
+* Until recently UCL had named buildings and lecture halls after these people...
+
+.pull-left[
+**Karl Perason**
+
+* Developed at UCL
+
+* University's first Chair of Eugenics that was established on the request of Galton
+
+* Pearson’s product-moment coefficient BUT just use **product-moment coefficient**
+  * Range from -1 to 1 to show relationship between two variables....
+
+]
+
+.pull-right[
+
+**Francis Galton**
+
+* Coined the word eugenics in 1883
+
+* Wanted it to become a religion 
+
+* Key figure in stats but most of these were to further eugenic ideas...
+
+.small[Source:[Natalie Ball](https://eugenicsarchive.ca/discover/tree/518c1ed54d7d6e0000000002)
+]  
+
+]
+
 
 ---
 
@@ -701,6 +986,8 @@ where:
 
 .pull-right[
  $$\frac{\lambda^{k}e^{-\lambda}}{k!}$$
+
+* In excel = `(($D$2^A2)*EXP(-$D$2)/FACT(A2))`
 * Expected = Expected frequency count on the Poisson distribution (freq count * probability)
 * Observed probability = Frequency count / sum of the frequency count
 ]
@@ -879,20 +1166,112 @@ db <- BluePlaquesSubPoints %>%
 
 How to select values
 
-* Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value 
+* Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value from a few slides ago...around 700 meters
 
-* Or plot the average  distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
+* Or plot the average distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
 
 ```{r, eval=FALSE}
 BluePlaquesSubPoints%>%
   dbscan::kNNdistplot(.,k=4)
 ```
 
+
+---
+# DBSCAN
+
+...this gives...
+
+
+```{r echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics('img/knee')
+```
+
+* plotted: average distance to the k neighbours, which are then plotted in ascending order
+  * The knee is where this value (of distance to neighbours) increases and the value we use
+
 * Min points: start with what you think is appropriate 
 
 * OPTICS - extends DBSCAN and uses an algorithm to find optimum distance thresholds for clustering. 
 
 ---
+
+# HDBSCAN - not in practical
+
+* Hierarchical Density-based Spatial Clustering of Applications with Noise
+
+K-means can performs best with:
+
+* round data, equally sized, equally dense, no noise.
+
+**HDBSCAN**
+
+* cluster hierarchy, looks for regions of dense data (not shape / eps / distance can vary)
+* e.g. islands from the sea ...
+
+.pull-left[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/HDBSCAN_1.png')
+```
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+
+]
+
+
+.pull-right[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/HDBSCAN_2.png')
+```
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+
+]
+---
+# HDBSCAN...best...
+
+.pull-left[
+
+* Arbitrary shapes - not all circular 
+
+* Clusters of different sizes - not constrained by 1 argument (e.g. distance or K neighbours)
+
+* Clusters with different densities 
+
+* Noise / outliers 
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/HDBSCAN_3.png')
+```
+.small[HDBSCAN. Source:[Pepe Berba](https://towardsdatascience.com/understanding-hdbscan-and-density-based-clustering-121dbee1320e)]
+]
+
+---
+# HDBSCAN...differences...
+
+* From the same authors that created DBSCAN
+
+* it is the same but...**there is no epsilon (distance requirement)** and it can **VARY**
+
+.pull-left[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/dbscan_clusters.png')
+```
+.small[Source:[Comparing Python Clustering Algorithms](https://hdbscan.readthedocs.io/en/latest/comparing_clustering_algorithms.html)]
+]
+
+
+
+.pull-right[
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/hdbscan_clusters.png')
+```
+.small[Source:[Comparing Python Clustering Algorithms](https://hdbscan.readthedocs.io/en/latest/comparing_clustering_algorithms.html)]
+]
+
+---
+
 class: inverse, center, middle
 
 # The core question..
@@ -909,9 +1288,151 @@ class: inverse, center, middle
 >you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!
 
 ---
+
+class: inverse, center, middle
+
+# Part 2: Spatial autocorrelation
+
+---
+
+# Questions we can ask / set
+
+**Points**
+
+Are these points distributed in a random way or is there some sort of pattern (uniform or clustered)?
+
+**Spatially continuous observations (e.g. values of polygons)**
+
+How (dis)similar are our values assigned to geographic units across geographic space
+
+---
 class: inverse, center, middle
 
 # Just because we have clustering doesn't mean there will be patterns of spatially referenced continuous observations 
+
+---
+
+# Example - Spatial Epidemiology: Mortality
+
+# Spatial Epidemiology: Mortality
+
+* Similar values might suggest there is something more going on
+* Some sort of spatial influence
+* Note the difference between spatially continuous and point data
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/Lorant.png')
+```
+
+.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&originRegion=eu-west-1&originCreation=20220221114112)
+]
+
+???
+
+Mortality and deprivation - clear mortality areas - what else is happening here?
+
+---
+# Example - GCSE scores 
+
+* Average GCSE point score 2014 per London ward
+* Question: Are the values similar between certain wards?
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/average_GCSE.png')
+```
+
+.small[Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#)
+]
+
+
+---
+
+# From points to spatially continuous observations 1
+
+* We can convert almost any point data into spatially continuous observations
+
+### Questions
+* Why should we never (or almost never) use count data (e.g. number of blue plaques per ward) for spatial autocorrelation measures?
+
+* In what instance might we be able to use count data?
+
+* Discuss in groups for 1 min 30 seconds?
+
+`r countdown(minutes=1, seconds =30, warn_when = 10, bottom=0, left="65%")`
+
+---
+# From points to spatially continuous observations 2
+
+### Answers
+
+* Summing the counts generates results that are dependent on the size of the spatial unit ...e.g...
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/grid_vs_tess_counts.svg')
+```
+
+.small[Count of individuals in each zonal unit. Note how an underlying point distribution can generate vastly different looking choropleth maps given different aggregation schemes. Source:[Intro to GIS and Spatial Analysis Manuel Gimond, 2022](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html)]
+
+---
+# From points to spatially continuous observations 3
+
+* In this case we could sum our counts and normalise then based on some sort of underling data - such as population. e.g...lung cancer rates or mortality rates 
+
+Our code would look similar to this ...
+
+```{r, eval=FALSE}
+points_sf_joined <- LondonWardsMerged%>%
+  st_join(BluePlaquesSub)%>%
+  add_count(ward_name)%>%
+  janitor::clean_names()%>%
+  #calculate area
+  mutate(area=st_area(.))%>%
+  #then density of the points per ward
+  mutate(density=n/area)%>%
+  #select density and some other variables 
+  dplyr::select(density, ward_name, gss_code, n, average_gcse_capped_point_scores_2014)
+```
+
+* Sometimes we can have "unstable rates" - where values are very small, consult [Coping with Unstable Rates](Gimond, 2022)
+
+---
+# From points to spatially continuous observations 4
+
+### Answers
+
+* An instance where it is ok to use counts is where the mapping units are spatially consistent --e.g. hexagons or Uber's H3 grid
+* The variable spatial unit is removed
+
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/hexagons.jpg')
+```
+
+.small[Source:[Thematic Mapping with Hexagons, ESRI 2015](https://www.esri.com/about/newsroom/insider/thematic-mapping-with-hexagons/)
+]
+
+---
+# Take care! 
+
+### Modifiable Areal Unit Problem
+
+* Different aggregations will lead to:
+
+  * Different outcomes
+  
+  * Uncomparable results 
+  
+```{r echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.png')
+```
+
+.small[Source:[gisgeography](https://gisgeography.com/maup-modifiable-areal-unit-problem/)
+]  
+---
+# Take care 2! 
+
+If you have aggregated point data they can no longer be described as points...as [Gimond 2022 says](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html#ecological-fallacy)
+
+> "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
 
 ---
 # Spatially continous observations 
@@ -1227,6 +1748,4 @@ class: inverse, center, middle
 ### Moran's I shows if neighbouring places have more similar (or dissimilar) values when compared with their difference to the average in the system
 
 ### Local Moran's I shows....?
-
-### Practical: https://rpubs.com/AndrewMacLachlan/870348
 
