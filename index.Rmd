@@ -203,7 +203,7 @@ knitr::include_graphics('img/John_Snow.jpg')
 John snow often attributed with identifying the outbreak at the broad street pump
 Data was from mortality reports issued by the Registrar General Office not surveys
 Snow wasn't responsible directly, but it contributed to the knowledge 
-Snow also didn't event this mapping style - 1795 New York outbreak of Yellow fever - Valentine Seaman 
+Snow also didn't invent this mapping style - 1795 New York outbreak of Yellow fever - Valentine Seaman 
 ---
 # Background
 
@@ -257,7 +257,7 @@ knitr::include_graphics('img/cholera.png')
 
 * Snow wasn't responsible directly, but it contributed to the knowledge 
 
-* Snow also didn't event this mapping style
+* Snow also didn't invent this mapping style
 
 * Snow didn't make the map, drawing was done by **Charles Cheffins** and probably others
 
@@ -354,7 +354,7 @@ class: inverse, center, middle
 
 # The problem...
 
-It is liked to ships, people, hot temperature, putrid air + water and cities!
+It is linked to ships, people, hot temperature, putrid air + water and cities!
 
 **Valentine Seamen** 
 
@@ -465,7 +465,7 @@ knitr::include_graphics('img/cholera.png')
 knitr::include_graphics('img/Coopermap.jpg')
 ```
 
-.small[Deaths from cholera in Soho, London 1854 by Edmund Cooper). Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
+.small[Deaths from cholera in Soho, London 1854 by Edmund Cooper. Source:[Kenneth Field](https://www.esri.com/arcgis-blog/products/arcgis-pro/mapping/something-in-the-water-the-mythology-of-snows-map-of-cholera/)
 ]
 
 
@@ -1083,6 +1083,8 @@ K <- BluePlaquesSub.ppp %>%
 * Border means that points towards the edge are ignored for the calculation but are included for the central points
 
 * In R type `?kest` into the console for more info 
+
+* Red line is Poisson distribution (complete spatial randomness)
 ]
 
 .pull-right[
@@ -1170,7 +1172,9 @@ How to select values
 
 * Eps: use the Ripley's K buldge - where the line shows the greatest difference to the theoretical value from a few slides ago...around 700 meters
 
-* Or plot the average distance to the k neighbours, which are then plotted in ascending order. The knee is where this value (of distance to neighbours) increases and the value we use.
+* Or plot the **average distance of each point to k neighbours**, which are then plotted in ascending (low to high) order. 
+
+  * The knee is where this value (of distance to neighbours) increases and the value we use.
 
 ```{r, eval=FALSE}
 BluePlaquesSubPoints%>%
@@ -1201,7 +1205,7 @@ knitr::include_graphics('img/knee')
 
 * Hierarchical Density-based Spatial Clustering of Applications with Noise
 
-K-means can performs best with:
+Other methods good when: 
 
 * round data, equally sized, equally dense, no noise.
 
