@@ -1332,6 +1332,43 @@ Are these points distributed in a random way or is there some sort of pattern (u
 How (dis)similar are our values assigned to geographic units across geographic space
 
 ---
+
+class: inverse, center, middle
+
+# Remember - what is fixed ? 
+---
+# Quantifying Spatial Patterns
+
+What is fixed?
+
+.pull-left[
+
+### Point Pattern Analysis
+
+* Properties are fixed (e.g. binary - present or not)
+* Discrete objects - present or not, binary, yes or no.
+* Examples: fly tipping, stop and search, blue plaques, pharmacies 
+
+Properties fixed, but **space (location - x,y)** can vary
+
+]
+
+.pull-right[
+
+### Spatial Autocorrelation
+
+* Space (e.g. the location of the spatial units - wards, boroughs etc) is fixed
+* The values of the spatial units vary
+* Where the values are similar we say they exhibit Spatial Autocorrelation 
+
+Space is fixed, but **properties (values)** can vary
+
+]
+
+
+
+---
+
 class: inverse, center, middle
 
 # Just because we have clustering doesn't mean there will be patterns of spatially referenced continuous observations 
@@ -1385,6 +1422,17 @@ knitr::include_graphics('img/average_GCSE.png')
 * Discuss in groups for 1 min 30 seconds?
 
 `r countdown(minutes=1, seconds =30, warn_when = 10, bottom=0, left="65%")`
+---
+
+class: inverse, center, middle
+
+# How would you go from point data to **continuous observations**
+
+## What are **spatially continuous observations ?** 
+
+--
+
+## continuous observatios over a surface e.g. temperature
 
 ---
 # From points to spatially continuous observations 2
@@ -1445,7 +1493,7 @@ knitr::include_graphics('img/hexagons.jpg')
 
   * Different outcomes
   
-  * Uncomparable results 
+  * Incomparable results 
   
 ```{r echo=FALSE, out.width='60%', fig.align='center'}
 knitr::include_graphics('img/MAUP-Scale-Effect-1265x632.png')
@@ -1461,21 +1509,49 @@ If you have aggregated point data they can no longer be described as points...as
 > "you might be tempted to state that there is a strong relationship between variables v1 and v2 at the individual level. But doing so leads to the ecological fallacy where the statistical relationship at one level of aggregation is (wrongly) assumed to hold at any other levels of aggregation (including at the individual level). In fact, all you can really say is that “at this level of aggregation, we observe a strong relationship between v1 and v2” and nothing more!"  
 
 ---
-# Spatially continous observations 
+# Spatially continuous observations 
 
-Tobler's First Law of Geography 
+Tobler's First Law of Geography
+
+
+.pull-left[
+
+**fundamental** to spatial analysis underpins 
+  * spatial dependence (values vary over space - e.g. weather station point data, depends on the location, dependent on space)
+  * autocorrelation (in this lecture)
+  * interpolation (estimating values on a surface e.g. weather station point data)
 
 > "Everything is related to everything else, but near things are more related than distant things.”
 
+]
+
+.pull-right[
+
+
+```{r echo=FALSE, out.width='70%', fig.align='center'}
+knitr::include_graphics('img/Waldo_Tobler_2007.jpg')
+```
+
+.small[Waldo R. Tobler. Source:[Wikipedia](https://en.wikipedia.org/wiki/Waldo_R._Tobler)]
+
+.small[Tobler W., (1970) "A computer movie simulating urban growth in the Detroit region". Economic Geography, 46(2): 234-240.]
+
+
+]
+---
+
+# Spatially continuous observations 
+
+
 But this does depend on our level of aggregation here...
 
-```{r echo=FALSE, out.width='32%', fig.align='center'}
+```{r echo=FALSE, out.width='40%', fig.align='center'}
 knitr::include_graphics('img/spatial_units.png')
 ```
 .small[Spatial Units. Source:[Tower Hamlets](https://www.towerhamlets.gov.uk/Documents/Borough_statistics/Research-tools-and-guidance/RB-Census2011-Census-Geography-Guide-2013-05.pdf)]
 
 ---
-# Spatially continous observations 
+# Spatially continuous observations 
 
 Formal definition:
 
@@ -1491,40 +1567,14 @@ knitr::include_graphics('img/auto_corr.png')
 ]
 
 ---
-# Indices of Spatial Association
 
-* Moran’s I, Geary’s C and Getis-Ord’s G are all indexes to compare values for neighbouring features
+# Spatially continuous observations 
 
-* Help answer the next core question – 
+Interpretation:
 
-.center[###“are the values for neighbouring features more similar than those for all other features?”]
+* Are the observations (data)
 
-* If the average difference between neighbouring features is less than between all features, values are clustered.
-
-* Can specify neighbouring based on adjacency, set distance or distance to all features – always conceived as a spatial weights matrix. 
-
-* There are global (one number for the whole system of interest) and local (individual numbers for each zone in the system) versions of both. 
-
-???
-
-Are the values in near places similar or dissimilar 
-
-
----
-# Moran's I
-
-* Most popular (best?) measure of spatial autocorrelation (SA)
-
-* Moran’s I = Do we have a clustered, random or dispersed pattern of X? 
-
-* (Morans) I statistic is a ratio that captures **if neighbouring places have more similar values when compared with their difference to the average in the system.**
-
-* Ranges from -1 (-ve SA) to 1 (+ve SA). 0 is no relationship.
-
-```{r, eval=FALSE}
-moran.test(., Lward.lw)
-```
-
+* Similar to those (of the same data) near (proximity) them or different over geographic space
 
 ```{r echo=FALSE, out.width='75%', fig.align='center'}
 knitr::include_graphics('img/auto_corr.png')
@@ -1533,53 +1583,207 @@ knitr::include_graphics('img/auto_corr.png')
 .small[Moran's I. Source:[ArcGIS](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/spatial-autocorrelation.htm)
 ]
 
-???
-
-To be able to do this we need to know what boundaries each polygon shares with others - boundary relationships 
 
 ---
-class: inverse, center, middle
 
-```{r echo=FALSE, out.width='75%', fig.align='center'}
-knitr::include_graphics('img/neighbours.jpg')
+# Spatial Autocorrelation
+
+.pull-left[
+
+* Frequently in spatial analysis we don’t just want to study discrete events, **but the ways in which variables change across space...**
+
+
+* Everything is related to everything else, but near things are more related than distant things
+
+
+* Are the GCSE scores of pupils in London more likely to be **similar in areas that are close to each other than those in areas that are distant**?
+
+* Similar observations in similar places might be the result of some underlying cause
+
+
+]
+
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/GCSE_scores.png')
 ```
 
+* Are the values clustered or are they random?
+
+
+]
+
 ---
 
 class: inverse, center, middle
 
-# In the classroom identify who is your neighbour? 
+## What algorthims do we use to check for clustering of spatially continuous data?
 
 --
 
-### what case did you use?
+## The can be global (single value)
 
-```{r echo=FALSE, out.width='30%', fig.align='center'}
+## Or local (values change over space) = Local Indicators of Spatial Association (LISA)
+
+---
+
+# The players...
+
+.pull-left[
+
+Left to right
+
+* Pat Moran (1917-1988) = **Moran's I** and then Local Moran's I by Luc Anselin 
+
+* Arthur (Art) Getis (1934-2022) = **Getis Ord General G**
+
+* Keith Ord (? - still works i think at Georgetown uni) = **Getis Ord General G**
+
+* Robert (Roy) Charles Geary (1896-1983) = **Geary’s C**
+
+]
+
+.pull-right[
+
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/players.png')
+```
+
+]
+
+
+---
+
+# Indices of Spatial Association
+
+* Moran’s I, Geary’s C and Getis-Ord’s G are all indexes to compare values for neighbouring features
+
+* Help answer the next core question – 
+
+.center[###are the values for neighbouring features more similar than those for all other features]
+
+.center[###if the average difference between neighbouring features is less than between all features, values are clustered]
+
+---
+
+class: inverse, center, middle
+
+
+## How do we define a neighbour to a polygon ?
+
+--
+
+## In the classroom identify who is your neighbour? 
+
+
+---
+class: inverse, center, middle
+
+```{r echo=FALSE, out.width='65%', fig.align='center'}
+knitr::include_graphics('img/neighbours.jpg')
+```
+---
+
+# What case did you use?
+
+```{r echo=FALSE, out.width='40%', fig.align='center'}
 knitr::include_graphics('img/neighbourscase.png')
 ```
 
 .small[Neighbour cases. Source:[Bellefon and Gleut, INSEE](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.insee.fr%2Fen%2Fstatistiques%2Ffichier%2F3635545%2Fimet131-f-chapitre-2.pdf&psig=AOvVaw1LoIbkFCWaGE8yFGX33S0k&ust=1645634985794000&source=images&cd=vfe&ved=0CAwQjhxqFwoTCOj3mpvik_YCFQAAAAAdAAAAABAN)
 ]
 
-```{r echo=FALSE, out.width='30%', fig.align='center'}
+```{r echo=FALSE, out.width='45%', fig.align='center'}
 knitr::include_graphics('img/nearest.jpeg')
 ```
 .small[Nearest neighbour. Source:[Towards Data Science](https://towardsdatascience.com/building-a-k-nearest-neighbors-k-nn-model-with-scikit-learn-51209555453a)
 ]
+---
+
+# What case did you use?
+
+* Are the values in near places similar or dissimilar 
+
+  * **Adjaceny** = what is next to my polygon should i compare to. **k** nearest (e.g. k=4, means 4 nearest from the centroid of the polygon) 
+
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/k_nearest.png')
+```
+
+
+???
+
+Are the values in near places similar or dissimilar 
+
 
 ---
 
-# GIS what is a neighbour
+# What case did you use?
 
-* We use the rules we have set - Rook, Queen, KNN or even just a distance for a list of neighbours 
+* Are the values in near places similar or dissimilar 
+
+  * **Distance** = how many polygons within a set distance should i compare to (from the centroid of the polygon)
+
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/distance_nearest.png')
+```
+
+
+???
+
+Are the values in near places similar or dissimilar 
+
+
+---
+
+
+class: inverse, center, middle
+
+
+## How do we show what is a neigbour in GIS? 
+
+
+---
+
+# Spatial weight matrix
+
+* A **binary (yes/no) matrix**
+
+```{r echo=FALSE, out.width='70%', fig.align='center'}
+knitr::include_graphics('img/binary.png')
+```
+.small[Weight matrix. Source:[Adam Dennett](https://twitter.com/adam_dennett)
+]
+
+* In matrix algebra, it is convention to refer to **rows** with the index, $i$ and **columns** with the index, $j$
+* $W_{ij}$ refers to any weight in this matrix
+* $W_{13}$ =1, $W_{52}$=0 etc.
+
+???
+
+* W = weight
+* i = row and j = column 
+* Zone 1 - neighbours with zone 2 and 3, and so has a value of 1
+
+---
+
+# The complete process
+
+
+1. Set **the rule** - what is a neighbour: Rook, Queen, KNN or even just a distance for a list of neighbours 
 ```{r, eval=FALSE}
 #create a neighbours list
 LWard_nb <- points_sf_joined %>%
   poly2nb(., queen=T)
 ```
 
-* We then define this in a spatial weight matrix which gives a numeric value to the neighbour.
-  * B is the basic binary coding (1/0)
+2. Set how **the matrix is populated** - gives a numeric value to the neighbour.
+  * B is the basic binary coding (1/0) (previous slide)
   * W is row standardised (sums over all links to n)
   * C is globally standardised (sums over all links to n)
   
@@ -1597,24 +1801,6 @@ knitr::include_graphics('img/matrix.png')
 ```
 .small[Weight matrix. Source:[CASA0005](https://andrewmaclachlan.github.io/CASA0005repo/detecting-spatial-patterns.html#data-manipulation)
 ]
----
-
-# Simple example
-```{r echo=FALSE, out.width='70%', fig.align='center'}
-knitr::include_graphics('img/binary.png')
-```
-.small[Weight matrix. Source:[Adam Dennett](https://twitter.com/adam_dennett)
-]
-
-* In matrix algebra, it is convention to refer to **rows** with the index, $i$ and **columns** with the index, $j$
-* $W_{ij}$ refers to any weight in this matrix
-* $W_{13}$ =1, $W_{52}$=0 etc.
-
-???
-
-* W = weight
-* i = row and j = column 
-* Zone 1 - neighbours with zone 2 and 3, and so has a value of 1
 
 ---
 
@@ -1635,6 +1821,103 @@ Row
 * In zone 3 each weight is 0.25 - Binary it would sum to 4
 
 ---
+
+# Example of Moran's I (global)...1
+
+1. Work out the matrix....
+
+```{r echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics('img/moran_I.png')
+```
+
+First part (left)
+
+```{r echo=FALSE, out.width='55%', fig.align='center'}
+knitr::include_graphics('img/moran_i_first.png')
+```
+
+---
+
+# Example of Moran's I (global)...2
+
+2. Work out the deviation (polygon - mean of neighbours)
+
+* Value of unit (i) - mean(polygon - mean)
+* Value of unit (i) - mean ^2 (polygon - mean)^2
+* Value of neighbour (j) - mean(polygon - mean)
+* Value of neighbour (j) - mean ^2 (polygon - mean)^2
+
+```{r echo=FALSE, out.width='64%', fig.align='center'}
+knitr::include_graphics('img/top_bottom.png')
+```
+---
+
+# Example of Moran's I (global)...3
+
+3. Times the deviation by the matrix (and sum the resulting matrix)
+
+```{r echo=FALSE, out.width='65%', fig.align='center'}
+knitr::include_graphics('img/deviation_times_matrix.png')
+```
+
+
+---
+# Example of Moran's I (global)...4 (see next slide)
+
+We now have:
+
+* Number of units (N): 6
+
+* Sum of weight matrix: (under N): 18 (binary) and 6 (row standardised)
+
+* Sum of the deviation (times weight matrix - top of the right part): 42.46 (binary), 19.11 (row standardised)
+
+* Sum of the deviation ^ 2 (bottom of the right part) = 43.39
+
+Plug it in: (units (N)/ sum of weight matrix) * (weight matrix deviation / deviation squared)
+  * (6/18) * (42.48/43.49) = 0.33
+  * (6/6) * (19.11/43.49) = 0.44 
+
+---
+  
+# Example of Moran's I (global)...4
+
+
+```{r echo=FALSE, out.width='65%', fig.align='center'}
+knitr::include_graphics('img/deviation_times_matrix.png')
+```
+
+---
+
+# Another way to think about this..Moran plot
+.pull-left[
+
+* In the Moran plot, we plot the value of spatial unit (against the average neighbouring values)
+  * They might be row standardised
+  
+* **Note**, this idea if comparing our value to neighbouring values is called a **spatial lag**
+
+* This shows us the relationship between the variables (x: raw value, y **average** standardised values from neighbors) 
+  * If we used binary then this is the sum
+  * row standardised is a local average 
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/MoranI_scatter_plot.png')
+```
+
+.small[Moran plot. Source:[Gimond, 2022](https://mgimond.github.io/Spatial/spatial-autocorrelation.html)
+]
+
+The slope is the Moran's I value (or coefficient here)
+
+]
+
+
+---
+
 class: inverse, center, middle
 
 
@@ -1657,9 +1940,8 @@ class: inverse, center, middle
   * If G > Expected = High values clustering; if G < expected = low values clustering
 
 * Moran's I
-  * Tells us whether we have clustered values (close to 1) or dispersed values (close to -1)
-
-
+  * Tells us whether **we have clustered values (close to 1) or dispersed values (close to -1)**
+  * Nothing about if the values are high or low
 ---
 # Local versions (LISA) - Anselin Moran's I
 
@@ -1669,7 +1951,7 @@ class: inverse, center, middle
 * Local Moran's I `localmoran(., Lward.lw)` gives a value for each spatial unit in relation to neigbhours and ...
   * Moran's I value
   * Expected Moran's I
-  * Variance
+  * Variance (of neighbors)
   * Z score - needs the expected and variance 
   * p-value 
 
@@ -1704,9 +1986,206 @@ knitr::include_graphics('img/sig.png')
 LISA = Local indicators of spatial association 
 ---
 
+# Local versions (LISA) - Anselin Moran's I
+
+**Null hypothesis of complete spatial randomness**
+
+> "A null hypothesis is a type of statistical hypothesis that proposes that no statistical significance exists in a set of given observations"
+
+* We assume that there is complete spatial randomness as default 
+
+* We are testing against that assumption 
+
+* The assumption is that the value will be within < -1.65 or > +1.65 standard deviations from the mean (or whatever you define - see later slide with z score table)
+
+* If it isn't then we are **far enough** away from the mean to state that this isn't random, based on the neighboring values.
+
+* Compared to the surrounding values, this one is different
+
+---
+
+
+# Local versions (LISA) - Anselin Moran's I
+
+**Local Moran's I explained**
+
+* Difference between a value and neighbours * sum of differences between neighbours and mean
+
+```{r echo=FALSE, out.width='20%', fig.align='center'}
+knitr::include_graphics('img/local_I.png')
+```
+.small[GLOBAL VS LOCAL SPATIAL AUTOCORRELATION. Source:[Geog 418/518](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
+]
+
+* Where the difference between the value of the unit (i) and the mean is divided by the standard deviation...
+  * Standard deviation = how much the values in the neighbourhood vary from mean of neighbourhood
+  
+
+```{r echo=FALSE, out.width='20%', fig.align='center'}
+knitr::include_graphics('img/local_I_stdev.png')
+```
+.small[GLOBAL VS LOCAL SPATIAL AUTOCORRELATION. Source:[Geog 418/518](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
+]
+
+---
+
+# Local versions (LISA) - Anselin Moran's I
+
+**Local Moran's I explained**
+
+* z-test = compare our local value of i to the neighbourhood if it were random...
+
+```{r echo=FALSE, out.width='20%', fig.align='center'}
+knitr::include_graphics('img/z_test.png')
+```
+.small[GLOBAL VS LOCAL SPATIAL AUTOCORRELATION. Source:[Geog 418/518](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
+]
+
+* Where the expected Moran's I value at location is computed from a formula
+
+* And the variance between of Moran's I also computed...
+
+---
+
+# Local versions (LISA) - Anselin Moran's I
+
+**Z score shows us...**
+
+* z-test = compare our local value of i to the neighbourhood if it were random...
+  * (Local i - minus sum of values in neighborhood / total number -1) / square root of variance
+
+```{r echo=FALSE, out.width='20%', fig.align='center'}
+knitr::include_graphics('img/z_test.png')
+```
+.small[GLOBAL VS LOCAL SPATIAL AUTOCORRELATION. Source:[Geog 418/518](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71)
+]
+
+See: [GLOBAL VS LOCAL SPATIAL AUTOCORRELATION](https://storymaps.arcgis.com/stories/5b26f25bb81a437b89003423505e2f71) for formulas
+
+---
+# Local versions (LISA) - Anselin Moran's I
+
+* Once we have the z score we compare it to the confidence levels to see it was by complete spatial randomness 
+
+* If it does we expect it to be in the middle of the distribution...Null hypothesis...
+
+* If it is within the tails then it is not completely random ...reject the null hypthoesis
+
+* The Moran's I value (or +ve /-ve Z score) will tell us if it is clustering (+ve) or dispersion (-ve)... 
+
+
+```{r echo=FALSE, out.width='50%', fig.align='center'}
+knitr::include_graphics('img/sig.png')
+```
+.small[What is a z score. Source:[ArcMap](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm)
+]
+
+---
+
+# Local versions (LISA) - Anselin Moran's I
+
+* z-score interpretation is as follows:
+
+```{r echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics('img/z_score.png')
+```
+.small[What is a z score. Source:[ArcMap](https://pro.arcgis.com/en/pro-app/2.8/tool-reference/spatial-statistics/what-is-a-z-score-what-is-a-p-value.htm)
+]
+
+We interpret this as...
+
+> `>2.58` or `<-2.58` standard deviations away from the mean are significant at the 99% level...this means there is a <1% chance that autocorrelation not present
+
+> `>1.96 - <2.58` or` <-1.96 to >-2.58` are significant at the 95% level (<5% change that autocorrelation not present)
+
+
+---
+# Local versions (LISA) - Anselin Moran's I
+
+.pull-left[
+
+* **Core idea** is to identify areas that are more similar (or dissimilar) to surroundings based on what we expect by chance!
+
+* In this case Prof Dani Arribas-Bel has standardised the values (subtract average and devided by standard deviation) for brexit votes
+
+* This gives us those with above average leave voting and below average leave voting
+
+]
+
+.pull-right[
+```{r echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics('img/07_local_autocorrelation_21_0.png')
+```
+
+.small[Moran plot. Source:[Arribas-Bel, 2022](https://geographicdata.science/book/notebooks/07_local_autocorrelation.html)
+]
+
+* high values surrounded by high values (HH)
+* low values nearby other low values (LL)
+* low values among high values (LH)
+* high values among low values (HL)]
+
+
+---
+
+# Local versions (LISA) - Anselin Moran's I
+
+Combine this idea with significane (either p or z score)
+
+I have done this using `case_when()`!
+
+```{r, eval=FALSE}
+signif <- 0.1
+
+
+# centers the variable of interest around its mean
+points_sf_joined2 <- points_sf_joined %>%
+  mutate(mean_density = density- mean(density))%>%
+  mutate(mean_density = as.vector(mean_density))%>%
+  mutate(mean_densityI= density_I - mean(density_I))%>%
+  mutate(quadrant = case_when(mean_density>0 & mean_densityI >0 ~ 4,
+         mean_density<0 & mean_densityI <0 ~ 1,
+         mean_density<0 & mean_densityI >0 ~ 2,
+         mean_density>0 & mean_densityI <0 ~ 3))%>%
+  mutate(quadrant=case_when(p > signif ~ 0, TRUE ~ quadrant))
+
+```
+
+See: https://rpubs.com/AndrewMacLachlan/870348 
+
+---
+
+# Local versions (LISA) - Anselin Moran's I
+
+.pull-left[
+
+Combine these ideas - significant and surrounded by like values....
+* high values surrounded by high values (HH)
+* low values nearby other low values (LL)
+* low values among high values (LH)
+* high values among low values (HL)
+
+]
+
+.pull-right[
+
+
+Pharmacy density in London.
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/moran_i_HH.png')
+```
+
+.small[Source:[Andy MacLachlan](https://rpubs.com/AndrewMacLachlan/870348)]
+]
+
+---
+
+
+
 class: inverse, center, middle
 
-# Local versions - Anselin Moran's I
+# Local versions - Anselins Moran's I
 
 ### Remember what the values mean
 
@@ -1724,6 +2203,8 @@ class: inverse, center, middle
 
 * Similar concept but just returns a z score
   * standardised value relating to whether high values or low values are clustering together
+  * However....this is the local sum comapred to the **sum of all features**
+  * A high value = sum of values within a neighborhood of a given radius or configuration is high relative to the global average
 
 * More intense clustering of high values = hot spot 
 
