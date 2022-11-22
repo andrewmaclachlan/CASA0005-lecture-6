@@ -1377,8 +1377,6 @@ class: inverse, center, middle
 
 # Example - Spatial Epidemiology: Mortality
 
-# Spatial Epidemiology: Mortality
-
 * Similar values might suggest there is something more going on
 * Some sort of spatial influence
 * Note the difference between spatially continuous and point data
@@ -1517,7 +1515,7 @@ Tobler's First Law of Geography
 .pull-left[
 
 **fundamental** to spatial analysis underpins 
-  * spatial dependence (values vary over space - e.g. weather station point data, depends on the location, dependent on space)
+  * spatial dependence (values vary over space - e.g. weather station point data, depends on the location and on other values)
   * autocorrelation (in this lecture)
   * interpolation (estimating values on a surface e.g. weather station point data)
 
@@ -1643,6 +1641,9 @@ Left to right
 
 * Robert (Roy) Charles Geary (1896-1983) = **Geary’s C**
 
+* Luc Anselin (1953-present) = **Anselin Moran's I (local)**
+
+
 ]
 
 .pull-right[
@@ -1741,6 +1742,29 @@ Are the values in near places similar or dissimilar
 
 ---
 
+# What case did you use?
+
+**topology** or topological relations =  the spatial relationships between adjacent or neighboring features
+
+
+.pull-left[
+
+* The Dimensionally Extended 9-Intersection Model (DE-9IM) is the standard topological model used in GIS to define spatial relationships between objects
+
+* If boundaries touch in some way, then we would usually classify objects as being neighbours
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/DE-9IM-logoSmall.png')
+```
+.small[DE-9IM. Source:[Wikipedia](https://en.wikipedia.org/wiki/DE-9IM)
+]
+]
+
+---
 
 class: inverse, center, middle
 
@@ -1856,7 +1880,7 @@ knitr::include_graphics('img/top_bottom.png')
 
 3. Times the deviation by the matrix (and sum the resulting matrix)
 
-```{r echo=FALSE, out.width='65%', fig.align='center'}
+```{r echo=FALSE, out.width='75%', fig.align='center'}
 knitr::include_graphics('img/deviation_times_matrix.png')
 ```
 
@@ -1883,7 +1907,7 @@ Plug it in: (units (N)/ sum of weight matrix) * (weight matrix deviation / devia
 # Example of Moran's I (global)...4
 
 
-```{r echo=FALSE, out.width='65%', fig.align='center'}
+```{r echo=FALSE, out.width='75%', fig.align='center'}
 knitr::include_graphics('img/deviation_times_matrix.png')
 ```
 
@@ -1903,6 +1927,7 @@ knitr::include_graphics('img/deviation_times_matrix.png')
 ]
 
 .pull-right[
+
 
 ```{r echo=FALSE, out.width='100%', fig.align='center'}
 knitr::include_graphics('img/MoranI_scatter_plot.png')
@@ -1942,6 +1967,23 @@ class: inverse, center, middle
 * Moran's I
   * Tells us whether **we have clustered values (close to 1) or dispersed values (close to -1)**
   * Nothing about if the values are high or low
+
+---
+# Other measures of spatial autocorrelation 
+
+* Geary's C and Moran's I are almost inversely related to each other...but they are not identical 
+* Moran's I = global comparison 
+  * standardizing the spatial autocovariance by the variance of the data
+* Geary's C = sensitive to local spatial autocorrelation 
+    * the sum of the squared differences between pairs of data values as its measure of covariation
+    
+```{r echo=FALSE, out.width='40%', fig.align='center'}
+knitr::include_graphics('img/moranIvsgearcyC.png')
+```
+
+.small[Moran I and Geary C. Source:[NKU, 2022](https://www.nku.edu/~longa/geomed/ppa/doc/globals/Globals.htm)
+]
+
 ---
 # Local versions (LISA) - Anselin Moran's I
 
@@ -2201,7 +2243,7 @@ class: inverse, center, middle
 
 * Pronounced G-i-star
 
-* Similar concept but just returns a z score
+* Similar concept but **just returns a z score**
   * standardised value relating to whether high values or low values are clustering together
   * However....this is the local sum comapred to the **sum of all features**
   * A high value = sum of values within a neighborhood of a given radius or configuration is high relative to the global average
@@ -2214,6 +2256,43 @@ class: inverse, center, middle
 localG(., Lward.lw)
 ```
 
+---
+# Moran's I  vs Getis-Ord Gi* 
+
+.pull-left[
+
+* Moran's I
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/income_I.png')
+```
+]
+
+
+.pull-right[
+
+* Getis Ord Gi* 
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics('img/income_getis.png')
+```
+]
+
+---
+
+# Moran's I  vs Getis-Ord Gi* notes
+
+.pull-left[
+
+* Moran’s I is a measure of the degree to which the value at a target site is similar to values at adjacent sites. Moran’s I is large and positive when the value for a given target (or for all locations in the global case) is similar to adjacent values and negative when the value at a target is dissimilar to adjacent values.
+
+]
+
+
+.pull-right[
+
+* Getis Ord G∗i identifies areas where high or low values cluster in space. It is high where the sum of values within a neighborhood of a given radius or configuration is high relative to the global average and negative where the sum of values within a neighborhood are small relative to the global average and approaches 0 at intermediate values.
+
+]
 
 ---
 # Limitations 
@@ -2228,7 +2307,18 @@ localG(., Lward.lw)
 
 * Indices of spatial association can be a good summary of the system, but it’s never possible to capture all complex spatial interactions in a single figure
 
+* **DO NOT COMPARE IF THEY HAVE DIFFERENT ZONES**
+
 ---
+
+class: inverse, center, middle
+
+# The next question...
+
+## We know where the clusters are but why are they there....or can we explain what is happening...
+
+---
+
 # Summary
 
 #### Points
