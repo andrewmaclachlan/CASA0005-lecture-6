@@ -1385,7 +1385,7 @@ class: inverse, center, middle
 knitr::include_graphics('img/Lorant.png')
 ```
 
-.small[Deprivation and mortality: the implications of spatial autocorrelation for health resources allocation. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&originRegion=eu-west-1&originCreation=20220221114112)
+.small[Mortality ratio increases from light grey (low mortality) to black (high mortality). Quintile method of categorisation used White municipalities have missing information.. Source:[Lornt et al.2001](https://reader.elsevier.com/reader/sd/pii/S0277953600004561?token=C5F23C3B005AE5E609482CE25240CBDC867C3A88C5D3E6DFA680F5DCA353B6799D0BD26BFDA6BE8E1A55E70684613D8E&originRegion=eu-west-1&originCreation=20220221114112)
 ]
 
 ???
