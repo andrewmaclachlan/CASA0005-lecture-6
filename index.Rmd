@@ -2259,11 +2259,14 @@ localG(., Lward.lw)
 ---
 # Moran's I  vs Getis-Ord Gi* 
 
+Pharmacy denisty in London
+
 .pull-left[
 
 * Moran's I
+
 ```{r echo=FALSE, out.width='100%', fig.align='center'}
-knitr::include_graphics('img/income_I.png')
+knitr::include_graphics('img/pharmacies_I.png')
 ```
 ]
 
@@ -2273,7 +2276,7 @@ knitr::include_graphics('img/income_I.png')
 * Getis Ord Gi* 
 
 ```{r echo=FALSE, out.width='100%', fig.align='center'}
-knitr::include_graphics('img/income_getis.png')
+knitr::include_graphics('img/pharmacies_Ord.png')
 ```
 ]
 
