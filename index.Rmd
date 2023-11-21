@@ -1753,6 +1753,8 @@ Are the values in near places similar or dissimilar
 
 * If boundaries touch in some way, then we would usually classify objects as being neighbours
 
+* For example... st_within, st_intersects, st_disjoint...
+
 ]
 
 .pull-right[
@@ -1856,7 +1858,7 @@ knitr::include_graphics('img/moran_I.png')
 
 First part (left)
 
-```{r echo=FALSE, out.width='45%', fig.align='center'}
+```{r echo=FALSE, out.width='40%', fig.align='center'}
 knitr::include_graphics('img/moran_i_first.png')
 ```
 
@@ -2250,7 +2252,7 @@ localG(., Lward.lw)
 ---
 # Moran's I  vs Getis-Ord Gi* 
 
-Pharmacy denisty in London
+Pharmacy density in London
 
 .pull-left[
 
